@@ -7,6 +7,7 @@ import { PickFeed } from '../components/draft/PickFeed'
 import { RosterGrid } from '../components/draft/RosterGrid'
 import { PositionNeed } from '../components/draft/PositionNeed'
 import { draftRounds } from '../engine/draft'
+import { SPORT_ICONS } from '../components/sportMeta'
 
 export function DraftRoomPage() {
   const { leagueId } = useParams<{ leagueId: string }>()
@@ -26,7 +27,7 @@ export function DraftRoomPage() {
 
   if (!state || state.id !== leagueId) {
     return (
-      <div className="flex min-h-svh items-center justify-center bg-zinc-950 text-zinc-500">Loading league…</div>
+      <div className="flex min-h-svh items-center justify-center text-zinc-500">Loading league…</div>
     )
   }
 
@@ -36,23 +37,26 @@ export function DraftRoomPage() {
   const picksMade = state.draft.picks.length
 
   return (
-    <div className="min-h-svh bg-zinc-950 p-6 text-zinc-200">
+    <div className="min-h-svh p-6 text-zinc-200">
       <div className="mx-auto max-w-7xl space-y-4">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-xl font-semibold text-zinc-50">{state.name}</h1>
-            <p className="text-xs uppercase tracking-wide text-zinc-500">
-              {state.config.label} · {state.phase}
-            </p>
+        <div className="app-card flex items-center justify-between px-5 py-3.5">
+          <div className="flex items-center gap-3">
+            <span className="text-2xl">{SPORT_ICONS[state.sport]}</span>
+            <div>
+              <h1 className="text-lg font-bold text-zinc-50">{state.name}</h1>
+              <p className="text-xs uppercase tracking-wide text-zinc-500">
+                {state.config.label} · <span className="text-emerald-400">{state.phase}</span>
+              </p>
+            </div>
           </div>
           {state.draft.status !== 'notStarted' && (
             <div className="flex items-center gap-2 text-xs text-zinc-500">
-              <span className="font-mono">
+              <span className="stat-number text-sm text-zinc-300">
                 Pick {Math.min(picksMade + 1, totalPicks)} / {totalPicks}
               </span>
               <div className="h-1.5 w-32 overflow-hidden rounded-full bg-zinc-800">
                 <div
-                  className="h-full bg-emerald-500 transition-[width] duration-500"
+                  className="h-full bg-gradient-to-r from-emerald-500 to-sky-400 transition-[width] duration-500"
                   style={{ width: `${(picksMade / totalPicks) * 100}%` }}
                 />
               </div>
@@ -61,13 +65,10 @@ export function DraftRoomPage() {
         </div>
 
         {state.phase === 'predraft' && (
-          <div className="flex flex-col items-center justify-center gap-4 rounded-lg border border-zinc-800 bg-zinc-900 py-24">
-            <p className="text-zinc-400">8 managers are ready. Start the snake draft when you are.</p>
-            <button
-              type="button"
-              onClick={() => void startDraft()}
-              className="rounded-md bg-emerald-500 px-6 py-3 font-semibold text-zinc-950 hover:bg-emerald-400"
-            >
+          <div className="app-card-glow flex flex-col items-center justify-center gap-4 py-24">
+            <span className="text-5xl">{SPORT_ICONS[state.sport]}</span>
+            <p className="text-lg text-zinc-300">8 managers are ready. Start the snake draft when you are.</p>
+            <button type="button" onClick={() => void startDraft()} className="btn-primary px-8 py-3.5 text-base">
               Start Draft
             </button>
           </div>
@@ -83,12 +84,9 @@ export function DraftRoomPage() {
             />
 
             {state.phase === 'regularSeason' && (
-              <div className="flex items-center justify-between rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-300">
-                <span>Draft complete. Final rosters below — set your lineup and play out the season.</span>
-                <Link
-                  to={`/league/${state.id}/season`}
-                  className="rounded bg-emerald-500 px-3 py-1.5 font-semibold text-zinc-950 hover:bg-emerald-400"
-                >
+              <div className="app-card flex items-center justify-between border-emerald-500/30 bg-gradient-to-r from-emerald-500/10 to-transparent px-4 py-3 text-sm text-emerald-300">
+                <span>🎉 Draft complete. Final rosters below — set your lineup and play out the season.</span>
+                <Link to={`/league/${state.id}/season`} className="btn-primary px-3.5 py-1.5 text-sm">
                   Go to Season Dashboard
                 </Link>
               </div>

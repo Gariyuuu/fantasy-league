@@ -21,7 +21,7 @@ export function SeasonDashboardPage() {
   }, [leagueId, state?.id, loadLeague])
 
   if (!state || state.id !== leagueId) {
-    return <div className="flex min-h-svh items-center justify-center bg-zinc-950 text-zinc-500">Loading league…</div>
+    return <div className="flex min-h-svh items-center justify-center text-zinc-500">Loading league…</div>
   }
 
   const humanTeam = state.teams.find((t) => t.isHuman)
@@ -43,13 +43,13 @@ export function SeasonDashboardPage() {
       : `Set your lineup, then advance the ${state.config.season.periodLabel.toLowerCase()} to see how it plays out.`
 
   return (
-    <div className="min-h-svh bg-zinc-950 p-6 text-zinc-200">
+    <div className="min-h-svh p-6">
       <div className="mx-auto max-w-5xl space-y-4">
         <LeagueNav state={state} />
 
-        <div className="flex items-center justify-between rounded-lg border border-zinc-800 bg-zinc-900 px-6 py-4">
+        <div className="app-card flex items-center justify-between px-6 py-4">
           <div>
-            <p className="text-xs uppercase tracking-wide text-zinc-500">
+            <p className="text-xs font-bold uppercase tracking-wide text-zinc-500">
               {isPlayoffs || isComplete
                 ? `${state.config.season.periodLabel} ${Math.min(state.currentPeriod, state.config.season.totalPeriods)}`
                 : `${state.config.season.periodLabel} ${state.currentPeriod} of ${state.config.season.totalPeriods}`}
@@ -60,18 +60,13 @@ export function SeasonDashboardPage() {
             {humanTeam && !isComplete && humanIsAlive && (
               <Link
                 to={`/league/${state.id}/${state.config.engine === 'salaryCapField' ? 'event' : 'lineup'}`}
-                className="rounded-md border border-zinc-700 px-4 py-2 text-sm font-medium text-zinc-200 hover:border-zinc-600"
+                className="btn-secondary text-sm"
               >
                 {state.config.engine === 'salaryCapField' ? 'Set Field' : 'Edit Lineup'}
               </Link>
             )}
             {!isComplete && (
-              <button
-                type="button"
-                disabled={isAdvancingWeek}
-                onClick={() => void advanceWeek()}
-                className="rounded-md bg-emerald-500 px-4 py-2 text-sm font-semibold text-zinc-950 hover:bg-emerald-400 disabled:opacity-50"
-              >
+              <button type="button" disabled={isAdvancingWeek} onClick={() => void advanceWeek()} className="btn-primary text-sm">
                 {isAdvancingWeek ? 'Simulating…' : isPlayoffs ? 'Play Round' : `Advance ${state.config.season.periodLabel} ${state.currentPeriod}`}
               </button>
             )}
@@ -91,7 +86,7 @@ export function SeasonDashboardPage() {
               {lastPlayedPeriod >= 1 ? (
                 <MatchupResults state={state} period={lastPlayedPeriod} />
               ) : (
-                <div className="rounded-lg border border-zinc-800 bg-zinc-900 p-4 text-xs text-zinc-600">
+                <div className="app-card p-4 text-xs text-zinc-600">
                   No {state.config.season.periodLabel.toLowerCase()}s played yet.
                 </div>
               )}

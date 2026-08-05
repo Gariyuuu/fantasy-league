@@ -24,29 +24,29 @@ export function DraftClockBar({ state, currentPickerTeamId, draftClockSeconds, i
 
   return (
     <div
-      className={`overflow-hidden rounded-lg border bg-zinc-900 transition-colors ${
-        isHumanTurn ? 'border-emerald-500/60' : 'border-zinc-800'
+      className={`overflow-hidden rounded-2xl border backdrop-blur-sm transition-colors ${
+        isHumanTurn
+          ? 'border-emerald-500/60 bg-gradient-to-b from-emerald-500/10 to-zinc-900/70'
+          : 'border-zinc-800/80 bg-zinc-900/70'
       } ${glowClass}`}
     >
       <div className="flex items-center justify-between px-6 py-4">
         <div>
-          <p className="text-xs uppercase tracking-wide text-zinc-500">
+          <p className="text-xs font-semibold uppercase tracking-wide text-zinc-500">
             Round {round} · Pick {pickInRound}
           </p>
-          <p className="mt-1 flex items-center gap-2 text-lg font-medium text-zinc-100">
+          <p className="mt-1 flex items-center gap-2 text-lg font-bold text-zinc-100">
             <span className="text-2xl">{persona?.avatar ?? '🧑'}</span>
             {isHumanTurn ? (
-              <span className="text-emerald-300">You're on the clock!</span>
+              <span className="gradient-text">You're on the clock!</span>
             ) : (
               <>{team ? team.name : '—'} is on the clock</>
             )}
           </p>
         </div>
-        <div className={`font-mono text-4xl font-bold tabular-nums ${urgency}`}>
-          {String(Math.max(0, draftClockSeconds)).padStart(2, '0')}s
-        </div>
+        <div className={`stat-number text-5xl ${urgency}`}>{String(Math.max(0, draftClockSeconds)).padStart(2, '0')}s</div>
       </div>
-      <div className="h-1 w-full bg-zinc-800">
+      <div className="h-1.5 w-full bg-zinc-800/80">
         <div
           className={`h-full ${barColor} transition-[width] duration-1000 ease-linear`}
           style={{ width: `${elapsedRatio * 100}%` }}

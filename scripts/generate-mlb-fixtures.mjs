@@ -1,8 +1,14 @@
 // Build-time fixture generator — not shipped runtime code. Produces
 // src/fixtures/mlb/players.ts: tiered per-day projections across all 30
-// MLB teams. Names are fictional (see NFL generator for rationale); team
-// abbreviations are real, factual MLB teams.
-import { writeFileSync } from 'node:fs'
+// MLB teams. Player names are real (2026 rosters, researched — see
+// scripts/data/mlb-real-rosters.json); team abbreviations are real,
+// factual MLB teams. Falls back to a generated fictional name for any
+// slot the roster data doesn't cover.
+import { writeFileSync, readFileSync } from 'node:fs'
+
+const realRosters = JSON.parse(
+  readFileSync(new URL('./data/mlb-real-rosters.json', import.meta.url), 'utf8'),
+)
 
 function mulberry32(seed) {
   let a = seed >>> 0
@@ -98,20 +104,24 @@ function addPlayer({ positions, team, tierKey, name }) {
   })
 }
 
+function realName(abbr, slot) {
+  return realRosters[abbr]?.[slot] ?? generateName()
+}
+
 for (const [abbr] of TEAMS) {
-  addPlayer({ positions: ['C'], team: abbr, tierKey: 'C', name: generateName() })
-  addPlayer({ positions: ['1B'], team: abbr, tierKey: '1B', name: generateName() })
-  addPlayer({ positions: ['2B'], team: abbr, tierKey: '2B', name: generateName() })
-  addPlayer({ positions: ['3B'], team: abbr, tierKey: '3B', name: generateName() })
-  addPlayer({ positions: ['SS'], team: abbr, tierKey: 'SS', name: generateName() })
-  addPlayer({ positions: ['OF'], team: abbr, tierKey: 'OF1', name: generateName() })
-  addPlayer({ positions: ['OF'], team: abbr, tierKey: 'OF2', name: generateName() })
-  addPlayer({ positions: ['OF'], team: abbr, tierKey: 'OF3', name: generateName() })
-  addPlayer({ positions: ['SP'], team: abbr, tierKey: 'SP1', name: generateName() })
-  addPlayer({ positions: ['SP'], team: abbr, tierKey: 'SP2', name: generateName() })
-  addPlayer({ positions: ['SP'], team: abbr, tierKey: 'SP3', name: generateName() })
-  addPlayer({ positions: ['RP'], team: abbr, tierKey: 'RP1', name: generateName() })
-  addPlayer({ positions: ['RP'], team: abbr, tierKey: 'RP2', name: generateName() })
+  addPlayer({ positions: ['C'], team: abbr, tierKey: 'C', name: realName(abbr, 'C') })
+  addPlayer({ positions: ['1B'], team: abbr, tierKey: '1B', name: realName(abbr, '1B') })
+  addPlayer({ positions: ['2B'], team: abbr, tierKey: '2B', name: realName(abbr, '2B') })
+  addPlayer({ positions: ['3B'], team: abbr, tierKey: '3B', name: realName(abbr, '3B') })
+  addPlayer({ positions: ['SS'], team: abbr, tierKey: 'SS', name: realName(abbr, 'SS') })
+  addPlayer({ positions: ['OF'], team: abbr, tierKey: 'OF1', name: realName(abbr, 'OF1') })
+  addPlayer({ positions: ['OF'], team: abbr, tierKey: 'OF2', name: realName(abbr, 'OF2') })
+  addPlayer({ positions: ['OF'], team: abbr, tierKey: 'OF3', name: realName(abbr, 'OF3') })
+  addPlayer({ positions: ['SP'], team: abbr, tierKey: 'SP1', name: realName(abbr, 'SP1') })
+  addPlayer({ positions: ['SP'], team: abbr, tierKey: 'SP2', name: realName(abbr, 'SP2') })
+  addPlayer({ positions: ['SP'], team: abbr, tierKey: 'SP3', name: realName(abbr, 'SP3') })
+  addPlayer({ positions: ['RP'], team: abbr, tierKey: 'RP1', name: realName(abbr, 'RP1') })
+  addPlayer({ positions: ['RP'], team: abbr, tierKey: 'RP2', name: realName(abbr, 'RP2') })
 }
 
 // A handful of day-to-day/IL statuses so injury-reactive waiver logic has

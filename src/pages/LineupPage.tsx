@@ -41,7 +41,7 @@ export function LineupPage() {
   }, [defaultLineup, instances])
 
   if (!state || state.id !== leagueId || !humanTeam) {
-    return <div className="flex min-h-svh items-center justify-center bg-zinc-950 text-zinc-500">Loading league…</div>
+    return <div className="flex min-h-svh items-center justify-center text-zinc-500">Loading league…</div>
   }
 
   const isPlayoffs = state.phase === 'playoffs'
@@ -54,10 +54,10 @@ export function LineupPage() {
 
   if (isComplete || (isPlayoffs && !humanIsAlive)) {
     return (
-      <div className="min-h-svh bg-zinc-950 p-6 text-zinc-200">
+      <div className="min-h-svh p-6">
         <div className="mx-auto max-w-3xl space-y-4">
           <LeagueNav state={state} />
-          <div className="rounded-lg border border-zinc-800 bg-zinc-900 p-6 text-center text-zinc-400">
+          <div className="app-card p-6 text-center text-zinc-400">
             {isComplete ? 'The season is over.' : 'Your season is over — you were eliminated from the playoffs.'}{' '}
             <Link to={`/league/${state.id}/season`} className="text-emerald-400 hover:underline">
               View the standings and bracket
@@ -113,14 +113,14 @@ export function LineupPage() {
       : rosterOptions.filter((p) => p.positions.some((pos) => inst.eligiblePositions.includes(pos)))
 
     return (
-      <div key={inst.key} className="flex items-center gap-3 border-b border-zinc-800/50 px-3 py-2">
-        <span className={`w-14 shrink-0 rounded border px-1.5 py-0.5 text-center text-[10px] font-semibold ${positionColor(inst.slot)}`}>
+      <div key={inst.key} className="flex items-center gap-3 border-b border-zinc-800/50 px-3.5 py-2.5">
+        <span className={`w-14 shrink-0 rounded-md border px-1.5 py-0.5 text-center text-[10px] font-bold ${positionColor(inst.slot)}`}>
           {inst.slot}
         </span>
         <select
           value={assignedId ?? ''}
           onChange={(e) => handleAssign(inst.key, e.target.value)}
-          className="flex-1 rounded border border-zinc-800 bg-zinc-900 px-2 py-1.5 text-sm text-zinc-200 focus:border-emerald-500 focus:outline-none"
+          className="flex-1 rounded-lg border border-zinc-800 bg-zinc-950/70 px-2.5 py-1.5 text-sm text-zinc-200 focus:border-emerald-500 focus:outline-none"
         >
           <option value="">— Empty —</option>
           {eligibleOptions.map((p) => (
@@ -130,7 +130,7 @@ export function LineupPage() {
           ))}
         </select>
         {assignedPlayer?.status && assignedPlayer.status !== 'active' && (
-          <span className="shrink-0 rounded bg-amber-500/20 px-1.5 py-0.5 text-[10px] uppercase text-amber-300">
+          <span className="shrink-0 rounded-full bg-amber-500/20 px-1.5 py-0.5 text-[10px] font-bold uppercase text-amber-300">
             {assignedPlayer.status}
           </span>
         )}
@@ -139,36 +139,32 @@ export function LineupPage() {
   }
 
   return (
-    <div className="min-h-svh bg-zinc-950 p-6 text-zinc-200">
+    <div className="min-h-svh p-6">
       <div className="mx-auto max-w-3xl space-y-4">
         <LeagueNav state={state} />
 
-        <div className="flex items-center justify-between">
+        <div className="app-card flex items-center justify-between px-4 py-3">
           <p className="text-sm text-zinc-400">
             Setting your lineup for {state.config.season.periodLabel} {state.currentPeriod}
           </p>
           <div className="flex items-center gap-3">
-            {savedAt && <span className="text-xs text-emerald-400">Saved</span>}
-            {!allStartersFilled && <span className="text-xs text-amber-400">Some starting slots are empty</span>}
-            <button
-              type="button"
-              onClick={() => void handleSave()}
-              className="rounded-md bg-emerald-500 px-4 py-2 text-sm font-semibold text-zinc-950 hover:bg-emerald-400"
-            >
+            {savedAt && <span className="text-xs font-semibold text-emerald-400">✓ Saved</span>}
+            {!allStartersFilled && <span className="text-xs font-semibold text-amber-400">Some starting slots are empty</span>}
+            <button type="button" onClick={() => void handleSave()} className="btn-primary text-sm">
               Save Lineup
             </button>
           </div>
         </div>
 
-        <div className="rounded-lg border border-zinc-800 bg-zinc-900">
-          <div className="border-b border-zinc-800 px-3 py-2 text-xs font-semibold uppercase tracking-wide text-zinc-500">
+        <div className="app-card">
+          <div className="border-b border-zinc-800/80 px-3.5 py-2.5 text-xs font-bold uppercase tracking-wide text-zinc-500">
             Starters
           </div>
           {starterInstances.map(renderRow)}
         </div>
 
-        <div className="rounded-lg border border-zinc-800 bg-zinc-900">
-          <div className="border-b border-zinc-800 px-3 py-2 text-xs font-semibold uppercase tracking-wide text-zinc-500">
+        <div className="app-card">
+          <div className="border-b border-zinc-800/80 px-3.5 py-2.5 text-xs font-bold uppercase tracking-wide text-zinc-500">
             Bench
           </div>
           {benchInstances.map(renderRow)}

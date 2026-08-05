@@ -40,7 +40,7 @@ export function WaiversPage() {
   }, [state, tab])
 
   if (!state || state.id !== leagueId || !humanTeam) {
-    return <div className="flex min-h-svh items-center justify-center bg-zinc-950 text-zinc-500">Loading league…</div>
+    return <div className="flex min-h-svh items-center justify-center text-zinc-500">Loading league…</div>
   }
 
   const pendingClaim = state.waiverClaims.find(
@@ -58,16 +58,16 @@ export function WaiversPage() {
   }
 
   return (
-    <div className="min-h-svh bg-zinc-950 p-6 text-zinc-200">
+    <div className="min-h-svh p-6">
       <div className="mx-auto max-w-4xl space-y-4">
         <LeagueNav state={state} />
 
-        <div className="flex items-center justify-between rounded-lg border border-zinc-800 bg-zinc-900 px-4 py-3 text-sm">
+        <div className="app-card flex items-center justify-between px-4 py-3 text-sm">
           <span className="text-zinc-400">
-            FAAB budget: <span className="font-mono text-zinc-100">${humanTeam.faabBudget ?? 0}</span>
+            FAAB budget: <span className="stat-number text-emerald-400">${humanTeam.faabBudget ?? 0}</span>
           </span>
           {pendingClaim && (
-            <span className="text-amber-300">
+            <span className="font-semibold text-amber-300">
               Pending claim: {state.players[pendingClaim.addPlayerId]?.name} for ${pendingClaim.faabBid} — processes when
               you advance the week
             </span>
@@ -75,17 +75,17 @@ export function WaiversPage() {
         </div>
 
         {selectedAddId && (
-          <div className="space-y-3 rounded-lg border border-emerald-500/30 bg-emerald-500/10 p-4">
+          <div className="app-card-glow space-y-3 p-4">
             <p className="text-sm text-emerald-200">
-              Claiming <span className="font-semibold">{state.players[selectedAddId]?.name}</span>
+              Claiming <span className="font-bold">{state.players[selectedAddId]?.name}</span>
             </p>
             <div className="flex items-end gap-3">
               <div className="flex-1">
-                <label className="mb-1 block text-xs text-zinc-400">Drop (optional)</label>
+                <label className="mb-1 block text-xs font-medium text-zinc-400">Drop (optional)</label>
                 <select
                   value={dropId}
                   onChange={(e) => setDropId(e.target.value)}
-                  className="w-full rounded border border-zinc-800 bg-zinc-900 px-2 py-1.5 text-sm text-zinc-200"
+                  className="w-full rounded-lg border border-zinc-800 bg-zinc-950/70 px-2.5 py-1.5 text-sm text-zinc-200"
                 >
                   <option value="">— Keep full roster —</option>
                   {humanTeam.roster.map((id) => (
@@ -96,44 +96,38 @@ export function WaiversPage() {
                 </select>
               </div>
               <div>
-                <label className="mb-1 block text-xs text-zinc-400">FAAB bid</label>
+                <label className="mb-1 block text-xs font-medium text-zinc-400">FAAB bid</label>
                 <input
                   type="number"
                   min={0}
                   max={humanTeam.faabBudget ?? 0}
                   value={bid}
                   onChange={(e) => setBid(Number(e.target.value))}
-                  className="w-24 rounded border border-zinc-800 bg-zinc-900 px-2 py-1.5 text-sm text-zinc-200"
+                  className="w-24 rounded-lg border border-zinc-800 bg-zinc-950/70 px-2.5 py-1.5 text-sm text-zinc-200"
                 />
               </div>
-              <button
-                type="button"
-                onClick={() => void handleSubmit()}
-                className="rounded bg-emerald-500 px-4 py-1.5 text-sm font-semibold text-zinc-950 hover:bg-emerald-400"
-              >
+              <button type="button" onClick={() => void handleSubmit()} className="btn-primary px-4 py-1.5 text-sm">
                 Submit Claim
               </button>
-              <button
-                type="button"
-                onClick={() => setSelectedAddId(null)}
-                className="rounded border border-zinc-700 px-3 py-1.5 text-sm text-zinc-300"
-              >
+              <button type="button" onClick={() => setSelectedAddId(null)} className="btn-secondary px-3 py-1.5 text-sm">
                 Cancel
               </button>
             </div>
           </div>
         )}
-        {submitted && !selectedAddId && <p className="text-xs text-emerald-400">Claim submitted.</p>}
+        {submitted && !selectedAddId && <p className="text-xs font-semibold text-emerald-400">✓ Claim submitted.</p>}
 
-        <div className="rounded-lg border border-zinc-800 bg-zinc-900">
-          <div className="flex gap-1 border-b border-zinc-800 p-2">
+        <div className="app-card">
+          <div className="flex gap-1 border-b border-zinc-800/80 p-2">
             {TABS.map((t) => (
               <button
                 key={t}
                 type="button"
                 onClick={() => setTab(t)}
-                className={`rounded px-2 py-1 text-xs font-medium ${
-                  tab === t ? 'bg-emerald-500 text-zinc-950' : 'text-zinc-400 hover:bg-zinc-800'
+                className={`rounded-lg px-2.5 py-1 text-xs font-bold transition-all ${
+                  tab === t
+                    ? 'bg-gradient-to-r from-emerald-500 to-emerald-400 text-zinc-950 shadow-md shadow-emerald-500/20'
+                    : 'text-zinc-400 hover:bg-zinc-800'
                 }`}
               >
                 {t}
@@ -143,15 +137,15 @@ export function WaiversPage() {
           <table className="w-full text-sm">
             <tbody>
               {freeAgents.map(({ player, value }) => (
-                <tr key={player.id} className="border-b border-zinc-800/60 hover:bg-zinc-800/40">
+                <tr key={player.id} className="border-b border-zinc-800/60 transition-colors hover:bg-zinc-800/40">
                   <td className="px-3 py-2">
-                    <span className={`rounded border px-1.5 py-0.5 text-[10px] font-semibold ${positionColor(player.positions[0])}`}>
+                    <span className={`rounded-md border px-1.5 py-0.5 text-[10px] font-bold ${positionColor(player.positions[0])}`}>
                       {player.positions[0]}
                     </span>
                   </td>
-                  <td className="px-2 py-2 font-medium text-zinc-200">{player.name}</td>
+                  <td className="px-2 py-2 font-semibold text-zinc-200">{player.name}</td>
                   <td className="px-2 py-2 text-xs text-zinc-500">{player.team}</td>
-                  <td className="px-2 py-2 text-right font-mono text-xs text-zinc-400">{value.toFixed(1)}</td>
+                  <td className="px-2 py-2 text-right font-mono text-xs font-bold text-zinc-400">{value.toFixed(1)}</td>
                   <td className="px-3 py-2 text-right">
                     <button
                       type="button"
@@ -159,7 +153,7 @@ export function WaiversPage() {
                         setSelectedAddId(player.id)
                         setSubmitted(false)
                       }}
-                      className="rounded bg-zinc-800 px-2 py-1 text-[11px] font-semibold text-zinc-200 hover:bg-zinc-700"
+                      className="rounded-lg bg-zinc-800 px-2.5 py-1 text-[11px] font-bold text-zinc-200 transition-colors hover:bg-zinc-700"
                     >
                       Claim
                     </button>
@@ -171,18 +165,18 @@ export function WaiversPage() {
         </div>
 
         {claimHistory.length > 0 && (
-          <div className="rounded-lg border border-zinc-800 bg-zinc-900">
-            <div className="border-b border-zinc-800 px-3 py-2 text-xs font-semibold uppercase tracking-wide text-zinc-500">
+          <div className="app-card">
+            <div className="border-b border-zinc-800/80 px-3.5 py-2.5 text-xs font-bold uppercase tracking-wide text-zinc-500">
               Claim history
             </div>
             <div className="divide-y divide-zinc-800/50">
               {claimHistory.map((c) => (
-                <div key={c.id} className="flex items-center justify-between px-3 py-2 text-sm">
+                <div key={c.id} className="flex items-center justify-between px-3.5 py-2.5 text-sm">
                   <span className="text-zinc-300">
                     {state.players[c.addPlayerId]?.name}{' '}
                     {c.dropPlayerId && <span className="text-zinc-600">(dropped {state.players[c.dropPlayerId]?.name})</span>}
                   </span>
-                  <span className={`text-xs font-semibold ${c.status === 'won' ? 'text-emerald-400' : 'text-zinc-500'}`}>
+                  <span className={`text-xs font-bold ${c.status === 'won' ? 'text-emerald-400' : 'text-zinc-500'}`}>
                     ${c.faabBid} · {c.status}
                   </span>
                 </div>

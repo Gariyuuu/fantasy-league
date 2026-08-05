@@ -21,8 +21,8 @@ export function PositionNeed({ state, team }: Props) {
   )
 
   return (
-    <div className="rounded-lg border border-zinc-800 bg-zinc-900 p-3">
-      <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-zinc-500">Your roster needs</p>
+    <div className="app-card p-4">
+      <p className="mb-2.5 text-xs font-bold uppercase tracking-wide text-zinc-500">Your roster needs</p>
       <div className="flex flex-wrap gap-1.5">
         {positions.map((pos) => {
           const drafted = draftedByPos[pos]
@@ -31,8 +31,8 @@ export function PositionNeed({ state, team }: Props) {
           return (
             <span
               key={pos}
-              className={`rounded border px-2 py-1 text-[11px] font-medium ${
-                filled ? 'border-zinc-700 bg-zinc-800 text-zinc-400' : positionColor(pos)
+              className={`rounded-lg border px-2.5 py-1.5 text-[11px] font-bold ${
+                filled ? 'border-zinc-700 bg-zinc-800/60 text-zinc-400' : `${positionColor(pos)} shadow-sm`
               }`}
             >
               {pos} {drafted}/{needed}

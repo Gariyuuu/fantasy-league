@@ -5,7 +5,13 @@
 }
 
 html {
-  @apply bg-zinc-950 text-zinc-200;
+  @apply text-zinc-200;
+  background-color: #05070d;
+  background-image:
+    radial-gradient(ellipse 1200px 600px at 15% -10%, rgba(16, 185, 129, 0.16), transparent 60%),
+    radial-gradient(ellipse 1000px 500px at 100% 0%, rgba(56, 189, 248, 0.12), transparent 55%),
+    radial-gradient(ellipse 900px 500px at 50% 100%, rgba(168, 85, 247, 0.08), transparent 55%);
+  background-attachment: fixed;
 }
 
 body {
@@ -16,6 +22,31 @@ body {
 
 #root {
   min-height: 100svh;
+}
+
+/* Shared visual language — bold sports-app feel instead of flat trading-terminal panels. */
+.app-card {
+  @apply rounded-2xl border border-zinc-800/80 bg-zinc-900/70 shadow-lg shadow-black/30 backdrop-blur-sm;
+}
+
+.app-card-glow {
+  @apply rounded-2xl border border-emerald-500/30 bg-gradient-to-b from-emerald-500/[0.07] to-zinc-900/70 shadow-lg shadow-emerald-500/10 backdrop-blur-sm;
+}
+
+.gradient-text {
+  @apply bg-gradient-to-r from-emerald-300 via-emerald-400 to-sky-400 bg-clip-text text-transparent;
+}
+
+.btn-primary {
+  @apply rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-400 px-4 py-2.5 font-bold text-zinc-950 shadow-lg shadow-emerald-500/25 transition-all hover:shadow-xl hover:shadow-emerald-500/40 hover:brightness-110 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:shadow-lg disabled:hover:brightness-100;
+}
+
+.btn-secondary {
+  @apply rounded-xl border border-zinc-700 bg-zinc-800/60 px-4 py-2.5 font-semibold text-zinc-200 transition-all hover:border-zinc-600 hover:bg-zinc-800 active:scale-[0.98];
+}
+
+.stat-number {
+  @apply font-mono font-black tabular-nums;
 }
 
 @keyframes clock-glow {

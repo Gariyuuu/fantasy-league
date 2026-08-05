@@ -18,17 +18,17 @@ export function RosterGrid({ state, currentPickerTeamId }: Props) {
     state.draft.picks.find((p) => p.teamId === teamId && roundForOverall(p.overall, teamCount) === round)
 
   return (
-    <div className="max-h-[420px] overflow-auto rounded-lg border border-zinc-800 bg-zinc-900">
+    <div className="app-card max-h-[420px] overflow-auto">
       <table className="w-full min-w-[900px] text-xs">
-        <thead className="sticky top-0 z-10 bg-zinc-900">
-          <tr className="border-b border-zinc-800">
+        <thead className="sticky top-0 z-10 bg-zinc-900/95 backdrop-blur-sm">
+          <tr className="border-b border-zinc-800/80">
             {orderedTeams.map((team) => {
               const persona = state.managerPersonas[team.managerId]
               const isOnClock = team.id === currentPickerTeamId
               return (
                 <th
                   key={team.id}
-                  className={`px-2 py-2 text-left font-medium transition-colors ${
+                  className={`px-2 py-2.5 text-left font-bold transition-colors ${
                     team.isHuman ? 'text-emerald-300' : 'text-zinc-400'
                   } ${isOnClock ? 'bg-emerald-500/10' : ''}`}
                 >

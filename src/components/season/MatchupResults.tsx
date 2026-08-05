@@ -9,9 +9,9 @@ export function MatchupResults({ state, period }: Props) {
   const matchups = state.matchups.filter((m) => m.period === period)
 
   return (
-    <div className="rounded-lg border border-zinc-800 bg-zinc-900">
-      <div className="border-b border-zinc-800 px-3 py-2 text-xs font-semibold uppercase tracking-wide text-zinc-500">
-        Week {period} results
+    <div className="app-card">
+      <div className="border-b border-zinc-800/80 px-3.5 py-2.5 text-xs font-bold uppercase tracking-wide text-zinc-500">
+        {state.config.season.periodLabel} {period} results
       </div>
       <div className="divide-y divide-zinc-800/50">
         {matchups.length === 0 && <p className="p-3 text-xs text-zinc-600">Not played yet.</p>}
@@ -21,18 +21,21 @@ export function MatchupResults({ state, period }: Props) {
           const homeWon = m.homeScore > m.awayScore
           const awayWon = m.awayScore > m.homeScore
           return (
-            <div key={i} className="flex items-center justify-between px-3 py-2 text-sm">
-              <span className={`flex-1 truncate ${homeWon ? 'font-semibold text-zinc-100' : 'text-zinc-400'}`}>
+            <div
+              key={i}
+              className={`flex items-center justify-between px-3.5 py-2.5 text-sm ${(home?.isHuman || away?.isHuman) ? 'bg-emerald-500/[0.04]' : ''}`}
+            >
+              <span className={`flex-1 truncate ${homeWon ? 'font-bold text-zinc-100' : 'text-zinc-400'}`}>
                 {home?.isHuman ? `${home.name} (you)` : home?.name}
               </span>
-              <span className={`w-14 text-right font-mono ${homeWon ? 'text-emerald-400' : 'text-zinc-400'}`}>
+              <span className={`stat-number w-14 text-right ${homeWon ? 'text-emerald-400' : 'text-zinc-500'}`}>
                 {m.homeScore.toFixed(1)}
               </span>
               <span className="mx-2 text-zinc-700">–</span>
-              <span className={`w-14 font-mono ${awayWon ? 'text-emerald-400' : 'text-zinc-400'}`}>
+              <span className={`stat-number w-14 ${awayWon ? 'text-emerald-400' : 'text-zinc-500'}`}>
                 {m.awayScore.toFixed(1)}
               </span>
-              <span className={`flex-1 truncate text-right ${awayWon ? 'font-semibold text-zinc-100' : 'text-zinc-400'}`}>
+              <span className={`flex-1 truncate text-right ${awayWon ? 'font-bold text-zinc-100' : 'text-zinc-400'}`}>
                 {away?.isHuman ? `${away.name} (you)` : away?.name}
               </span>
             </div>

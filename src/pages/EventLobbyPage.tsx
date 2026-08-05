@@ -38,7 +38,7 @@ export function EventLobbyPage() {
   }, [state, weights])
 
   if (!state || state.id !== leagueId || !humanTeam) {
-    return <div className="flex min-h-svh items-center justify-center bg-zinc-950 text-zinc-500">Loading league…</div>
+    return <div className="flex min-h-svh items-center justify-center text-zinc-500">Loading league…</div>
   }
 
   const spent = [...selected].reduce((sum, id) => sum + (state.players[id]?.salary ?? 0), 0)
@@ -70,42 +70,41 @@ export function EventLobbyPage() {
   }
 
   return (
-    <div className="min-h-svh bg-zinc-950 p-6 text-zinc-200">
+    <div className="min-h-svh p-6">
       <div className="mx-auto max-w-3xl space-y-4">
         <LeagueNav state={state} />
 
-        <div className="flex items-center justify-between rounded-lg border border-zinc-800 bg-zinc-900 px-4 py-3">
+        <div className="app-card flex items-center justify-between px-4 py-3">
           <div className="text-sm text-zinc-400">
-            {state.config.season.periodLabel} {state.currentPeriod} — pick {fieldSize} golfers under the salary cap
+            ⛳ {state.config.season.periodLabel} {state.currentPeriod} — pick {fieldSize} golfers under the salary cap
           </div>
           <div className="flex items-center gap-4 text-sm">
-            <span className="font-mono text-zinc-300">
+            <span className="stat-number text-zinc-300">
               {selected.size}/{fieldSize} picked
             </span>
-            <span className={`font-mono ${remaining < 0 ? 'text-red-400' : 'text-emerald-400'}`}>
+            <span className={`stat-number ${remaining < 0 ? 'text-rose-400' : 'text-emerald-400'}`}>
               ${remaining.toLocaleString()} left of ${cap.toLocaleString()}
             </span>
-            {savedAt && <span className="text-xs text-emerald-400">Saved</span>}
+            {savedAt && <span className="text-xs font-semibold text-emerald-400">✓ Saved</span>}
             <button
               type="button"
               disabled={selected.size !== fieldSize}
               onClick={() => void handleSave()}
-              className="rounded-md bg-emerald-500 px-4 py-2 text-sm font-semibold text-zinc-950 hover:bg-emerald-400 disabled:opacity-50"
+              className="btn-primary px-4 py-2 text-sm"
             >
               Save Field
             </button>
           </div>
         </div>
 
-        <div className="rounded-lg border border-zinc-800 bg-zinc-900">
+        <div className="app-card overflow-hidden">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-zinc-800 text-left text-xs uppercase tracking-wide text-zinc-500">
-                <th className="px-3 py-2"></th>
-                <th className="px-3 py-2">Golfer</th>
-                <th className="px-3 py-2">Country</th>
-                <th className="px-3 py-2 text-right">Salary</th>
-                <th className="px-3 py-2 text-right">Proj.</th>
+              <tr className="border-b border-zinc-800/80 text-left text-xs font-bold uppercase tracking-wide text-zinc-500">
+                <th className="px-3 py-2.5"></th>
+                <th className="px-3 py-2.5">Golfer</th>
+                <th className="px-3 py-2.5 text-right">Salary</th>
+                <th className="px-3 py-2.5 text-right">Proj.</th>
               </tr>
             </thead>
             <tbody>
@@ -116,16 +115,15 @@ export function EventLobbyPage() {
                 return (
                   <tr
                     key={player.id}
-                    className={`cursor-pointer border-b border-zinc-800/50 ${isSelected ? 'bg-emerald-500/10' : 'hover:bg-zinc-800/40'} ${disabled ? 'opacity-40' : ''}`}
+                    className={`cursor-pointer border-b border-zinc-800/50 transition-colors ${isSelected ? 'bg-emerald-500/10' : 'hover:bg-zinc-800/40'} ${disabled ? 'opacity-40' : ''}`}
                     onClick={() => !disabled && toggle(player.id)}
                   >
                     <td className="px-3 py-2">
                       <input type="checkbox" checked={isSelected} disabled={disabled} onChange={() => toggle(player.id)} className="accent-emerald-500" />
                     </td>
-                    <td className="px-2 py-2 font-medium text-zinc-200">{player.name}</td>
-                    <td className="px-2 py-2 text-xs text-zinc-500">{player.team}</td>
-                    <td className="px-2 py-2 text-right font-mono text-zinc-400">${salary.toLocaleString()}</td>
-                    <td className="px-2 py-2 text-right font-mono text-zinc-400">{value.toFixed(1)}</td>
+                    <td className="px-2 py-2 font-semibold text-zinc-200">{player.name}</td>
+                    <td className="px-2 py-2 text-right font-mono font-bold text-zinc-400">${salary.toLocaleString()}</td>
+                    <td className="px-2 py-2 text-right font-mono font-bold text-zinc-400">{value.toFixed(1)}</td>
                   </tr>
                 )
               })}

@@ -1,9 +1,14 @@
 // Build-time fixture generator — not shipped runtime code. Produces
 // src/fixtures/nfl/players.ts: a realistic, tiered depth chart across all
-// 32 teams with per-stat-category weekly projections. Names are fictional
-// (avoids baking real athletes' names/likeness into checked-in sample
-// data); team abbreviations are the real, factual NFL teams.
-import { writeFileSync } from 'node:fs'
+// 32 teams with per-stat-category weekly projections. Player names are
+// real (2026 rosters, researched — see scripts/data/nfl-real-rosters.json);
+// team abbreviations are the real, factual NFL teams. Falls back to a
+// generated fictional name for any slot the roster data doesn't cover.
+import { writeFileSync, readFileSync } from 'node:fs'
+
+const realRosters = JSON.parse(
+  readFileSync(new URL('./data/nfl-real-rosters.json', import.meta.url), 'utf8'),
+)
 
 function mulberry32(seed) {
   let a = seed >>> 0
@@ -133,18 +138,22 @@ function addPlayer({ positions, team, tierKey, name, status = 'active' }) {
   })
 }
 
+function realName(abbr, slot) {
+  return realRosters[abbr]?.[slot] ?? generateName()
+}
+
 for (const [abbr, teamName] of TEAMS) {
-  addPlayer({ positions: ['QB'], team: abbr, tierKey: 'QB1', name: generateName() })
-  addPlayer({ positions: ['RB'], team: abbr, tierKey: 'RB1', name: generateName() })
-  addPlayer({ positions: ['RB'], team: abbr, tierKey: 'RB2', name: generateName() })
-  addPlayer({ positions: ['RB'], team: abbr, tierKey: 'RB3', name: generateName() })
-  addPlayer({ positions: ['WR'], team: abbr, tierKey: 'WR1', name: generateName() })
-  addPlayer({ positions: ['WR'], team: abbr, tierKey: 'WR2', name: generateName() })
-  addPlayer({ positions: ['WR'], team: abbr, tierKey: 'WR3', name: generateName() })
-  addPlayer({ positions: ['WR'], team: abbr, tierKey: 'WR4', name: generateName() })
-  addPlayer({ positions: ['TE'], team: abbr, tierKey: 'TE1', name: generateName() })
-  addPlayer({ positions: ['TE'], team: abbr, tierKey: 'TE2', name: generateName() })
-  addPlayer({ positions: ['K'], team: abbr, tierKey: 'K', name: generateName() })
+  addPlayer({ positions: ['QB'], team: abbr, tierKey: 'QB1', name: realName(abbr, 'QB1') })
+  addPlayer({ positions: ['RB'], team: abbr, tierKey: 'RB1', name: realName(abbr, 'RB1') })
+  addPlayer({ positions: ['RB'], team: abbr, tierKey: 'RB2', name: realName(abbr, 'RB2') })
+  addPlayer({ positions: ['RB'], team: abbr, tierKey: 'RB3', name: realName(abbr, 'RB3') })
+  addPlayer({ positions: ['WR'], team: abbr, tierKey: 'WR1', name: realName(abbr, 'WR1') })
+  addPlayer({ positions: ['WR'], team: abbr, tierKey: 'WR2', name: realName(abbr, 'WR2') })
+  addPlayer({ positions: ['WR'], team: abbr, tierKey: 'WR3', name: realName(abbr, 'WR3') })
+  addPlayer({ positions: ['WR'], team: abbr, tierKey: 'WR4', name: realName(abbr, 'WR4') })
+  addPlayer({ positions: ['TE'], team: abbr, tierKey: 'TE1', name: realName(abbr, 'TE1') })
+  addPlayer({ positions: ['TE'], team: abbr, tierKey: 'TE2', name: realName(abbr, 'TE2') })
+  addPlayer({ positions: ['K'], team: abbr, tierKey: 'K', name: realName(abbr, 'K') })
   addPlayer({ positions: ['DST'], team: abbr, tierKey: 'DST', name: `${teamName} Defense` })
 }
 

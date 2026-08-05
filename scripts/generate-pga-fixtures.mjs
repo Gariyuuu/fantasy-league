@@ -1,9 +1,22 @@
 // Build-time fixture generator — not shipped runtime code. Produces
 // src/fixtures/pga/players.ts: a tiered field of golfers with per-event
-// projections and DFS-style salaries. Names are fictional (see NFL
-// generator for rationale); "team" holds a nationality tag for flavor
-// since golf has no franchise structure.
-import { writeFileSync } from 'node:fs'
+// projections and DFS-style salaries. Player names are real (current PGA
+// Tour players, researched — see scripts/data/pga-real-golfers.json,
+// tiered by ranking). "team" is a neutral "PGA" tag rather than a
+// nationality guess, since attaching a made-up country to a real,
+// identifiable person isn't worth the flavor. Falls back to a generated
+// fictional name for any tier slot the roster data doesn't cover.
+import { writeFileSync, readFileSync } from 'node:fs'
+
+const realGolfers = JSON.parse(
+  readFileSync(new URL('./data/pga-real-golfers.json', import.meta.url), 'utf8'),
+)
+const realGolferQueues = {
+  elite: [...realGolfers.elite],
+  contender: [...realGolfers.contender],
+  journeyman: [...realGolfers.journeyman],
+  longshot: [...realGolfers.longshot],
+}
 
 function mulberry32(seed) {
   let a = seed >>> 0
@@ -16,8 +29,6 @@ function mulberry32(seed) {
 }
 const rng = mulberry32(20260807)
 const rand = (min, max) => min + rng() * (max - min)
-
-const COUNTRIES = ['USA', 'ENG', 'AUS', 'RSA', 'ESP', 'IRL', 'SWE', 'JPN', 'KOR', 'CAN']
 
 const FIRST_NAMES = [
   'Marcus', 'Deion', 'Jalen', 'Trevon', 'Kaden', 'Xavier', 'Malik', 'Cole', 'Bryce', 'Antoine',
@@ -96,12 +107,13 @@ const players = []
 function addGolfer(tierKey) {
   idCounter += 1
   const [salaryMin, salaryMax] = TIERS[tierKey].salary
+  const name = realGolferQueues[tierKey].shift() ?? generateName()
   players.push({
     id: `pga-${String(idCounter).padStart(4, '0')}`,
     sport: 'pga',
-    name: generateName(),
+    name,
     positions: ['GOLFER'],
-    team: COUNTRIES[Math.floor(rand(0, COUNTRIES.length))],
+    team: 'PGA',
     projection: buildProjection(tierKey),
     salary: round100(rand(salaryMin, salaryMax)),
     status: 'active',

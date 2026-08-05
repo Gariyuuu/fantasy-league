@@ -2,6 +2,7 @@ import { useState, type FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useLeagueStore } from '../store/useLeagueStore'
 import { sportConfigs } from '../config/sports'
+import { SPORT_ICONS } from '../components/sportMeta'
 import type { Difficulty, ScoringPresetId, SportId } from '../types'
 
 const ALL_SPORTS: { id: SportId; label: string; engine: string }[] = [
@@ -36,39 +37,41 @@ export function CreateLeaguePage() {
     navigate(skipsDraft ? `/league/${id}/season` : `/league/${id}/draft`)
   }
 
+  const inputClass =
+    'w-full rounded-xl border border-zinc-800 bg-zinc-900/70 px-3.5 py-2.5 text-zinc-100 placeholder:text-zinc-600 transition-colors focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20'
+
   return (
-    <div className="min-h-svh bg-zinc-950 p-8 text-zinc-200">
+    <div className="min-h-svh p-8">
       <div className="mx-auto max-w-xl">
-        <h1 className="mb-6 text-2xl font-semibold text-zinc-50">Create League</h1>
+        <h1 className="mb-1 text-3xl font-black tracking-tight">
+          <span className="gradient-text">Create League</span>
+        </h1>
+        <p className="mb-6 text-sm text-zinc-500">Pick a sport, name your team, and go.</p>
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label className="mb-1 block text-sm text-zinc-400" htmlFor="league-name">
-              League name
-            </label>
-            <input
-              id="league-name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="w-full rounded-md border border-zinc-800 bg-zinc-900 px-3 py-2 text-zinc-100 focus:border-emerald-500 focus:outline-none"
-              required
-            />
-          </div>
-          <div>
-            <label className="mb-1 block text-sm text-zinc-400" htmlFor="team-name">
-              Your team name
-            </label>
-            <input
-              id="team-name"
-              value={humanTeamName}
-              onChange={(e) => setHumanTeamName(e.target.value)}
-              className="w-full rounded-md border border-zinc-800 bg-zinc-900 px-3 py-2 text-zinc-100 focus:border-emerald-500 focus:outline-none"
-              required
-            />
+          <div className="app-card grid grid-cols-2 gap-4 p-4">
+            <div>
+              <label className="mb-1 block text-sm font-medium text-zinc-400" htmlFor="league-name">
+                League name
+              </label>
+              <input id="league-name" value={name} onChange={(e) => setName(e.target.value)} className={inputClass} required />
+            </div>
+            <div>
+              <label className="mb-1 block text-sm font-medium text-zinc-400" htmlFor="team-name">
+                Your team name
+              </label>
+              <input
+                id="team-name"
+                value={humanTeamName}
+                onChange={(e) => setHumanTeamName(e.target.value)}
+                className={inputClass}
+                required
+              />
+            </div>
           </div>
 
           <div>
-            <p className="mb-2 block text-sm text-zinc-400">Sport (in season now)</p>
-            <div className="grid grid-cols-3 gap-2">
+            <p className="mb-2 text-sm font-medium text-zinc-400">Sport (in season now)</p>
+            <div className="grid grid-cols-3 gap-2.5">
               {ALL_SPORTS.map((s) => {
                 const available = Boolean(sportConfigs[s.id])
                 const selected = sport === s.id
@@ -78,15 +81,16 @@ export function CreateLeaguePage() {
                     key={s.id}
                     disabled={!available}
                     onClick={() => setSport(s.id)}
-                    className={`rounded-md border px-3 py-2 text-left text-sm ${
+                    className={`rounded-xl border p-3 text-left text-sm transition-all ${
                       selected
-                        ? 'border-emerald-500 bg-emerald-500/10 text-emerald-300'
+                        ? 'border-emerald-500 bg-gradient-to-b from-emerald-500/15 to-emerald-500/5 text-emerald-300 shadow-lg shadow-emerald-500/10'
                         : available
-                          ? 'border-zinc-800 bg-zinc-900 text-zinc-200 hover:border-zinc-700'
-                          : 'cursor-not-allowed border-zinc-900 bg-zinc-950 text-zinc-700'
+                          ? 'border-zinc-800 bg-zinc-900/70 text-zinc-200 hover:-translate-y-0.5 hover:border-zinc-700 hover:bg-zinc-900'
+                          : 'cursor-not-allowed border-zinc-900 bg-zinc-950/50 text-zinc-700'
                     }`}
                   >
-                    <div className="font-medium">{s.label}</div>
+                    <div className="mb-1 text-xl">{SPORT_ICONS[s.id]}</div>
+                    <div className="font-semibold">{s.label}</div>
                     <div className="text-xs opacity-70">{available ? s.engine : 'Coming soon'}</div>
                   </button>
                 )
@@ -94,32 +98,22 @@ export function CreateLeaguePage() {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="app-card grid grid-cols-2 gap-4 p-4">
             <div>
-              <label className="mb-1 block text-sm text-zinc-400" htmlFor="scoring">
+              <label className="mb-1 block text-sm font-medium text-zinc-400" htmlFor="scoring">
                 Scoring
               </label>
-              <select
-                id="scoring"
-                value={scoringPreset}
-                onChange={(e) => setScoringPreset(e.target.value as ScoringPresetId)}
-                className="w-full rounded-md border border-zinc-800 bg-zinc-900 px-3 py-2 text-zinc-100"
-              >
+              <select id="scoring" value={scoringPreset} onChange={(e) => setScoringPreset(e.target.value as ScoringPresetId)} className={inputClass}>
                 <option value="standard">Standard</option>
                 <option value="ppr">PPR</option>
                 <option value="custom">Custom</option>
               </select>
             </div>
             <div>
-              <label className="mb-1 block text-sm text-zinc-400" htmlFor="difficulty">
+              <label className="mb-1 block text-sm font-medium text-zinc-400" htmlFor="difficulty">
                 AI difficulty
               </label>
-              <select
-                id="difficulty"
-                value={difficulty}
-                onChange={(e) => setDifficulty(e.target.value as Difficulty)}
-                className="w-full rounded-md border border-zinc-800 bg-zinc-900 px-3 py-2 text-zinc-100"
-              >
+              <select id="difficulty" value={difficulty} onChange={(e) => setDifficulty(e.target.value as Difficulty)} className={inputClass}>
                 <option value="casual">Casual</option>
                 <option value="normal">Normal</option>
                 <option value="sharp">Sharp</option>
@@ -127,13 +121,11 @@ export function CreateLeaguePage() {
             </div>
           </div>
 
-          <p className="text-xs text-zinc-500">8-team league: you + 7 AI managers.</p>
+          <p className="flex items-center gap-1.5 text-xs text-zinc-500">
+            <span>👥</span> 8-team league: you + 7 AI managers.
+          </p>
 
-          <button
-            type="submit"
-            disabled={isCreating}
-            className="w-full rounded-md bg-emerald-500 px-4 py-2 font-medium text-zinc-950 hover:bg-emerald-400 disabled:opacity-50"
-          >
+          <button type="submit" disabled={isCreating} className="btn-primary w-full text-base">
             {isCreating ? 'Creating…' : 'Create League'}
           </button>
         </form>

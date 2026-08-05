@@ -1,5 +1,6 @@
-import { NavLink } from 'react-router-dom'
+import { NavLink, Link } from 'react-router-dom'
 import type { LeagueState } from '../types'
+import { SPORT_ICONS } from './sportMeta'
 
 interface Props {
   state: LeagueState
@@ -17,21 +18,26 @@ function phaseLabel(state: LeagueState): string {
 
 export function LeagueNav({ state }: Props) {
   const tabClass = ({ isActive }: { isActive: boolean }) =>
-    `rounded px-3 py-1.5 text-sm font-medium ${
-      isActive ? 'bg-emerald-500 text-zinc-950' : 'text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200'
+    `rounded-lg px-3 py-1.5 text-sm font-semibold transition-all ${
+      isActive
+        ? 'bg-gradient-to-r from-emerald-500 to-emerald-400 text-zinc-950 shadow-md shadow-emerald-500/25'
+        : 'text-zinc-400 hover:bg-zinc-800/80 hover:text-zinc-100'
     }`
 
   const hasDraft = state.config.draft.type !== 'none'
   const hasRosterMechanics = state.config.engine !== 'salaryCapField'
 
   return (
-    <div className="flex items-center justify-between">
-      <div>
-        <h1 className="text-xl font-semibold text-zinc-50">{state.name}</h1>
-        <p className="text-xs uppercase tracking-wide text-zinc-500">
-          {state.config.label} · {phaseLabel(state)}
-        </p>
-      </div>
+    <div className="app-card flex items-center justify-between px-5 py-3.5">
+      <Link to="/" className="flex items-center gap-3">
+        <span className="text-2xl">{SPORT_ICONS[state.sport]}</span>
+        <div>
+          <h1 className="text-lg font-bold text-zinc-50">{state.name}</h1>
+          <p className="text-xs uppercase tracking-wide text-zinc-500">
+            {state.config.label} · <span className="text-emerald-400">{phaseLabel(state)}</span>
+          </p>
+        </div>
+      </Link>
       {(state.phase === 'regularSeason' || state.phase === 'playoffs' || state.phase === 'complete') && (
         <nav className="flex gap-1">
           <NavLink to={`/league/${state.id}/${hasRosterMechanics ? 'lineup' : 'event'}`} className={tabClass}>
