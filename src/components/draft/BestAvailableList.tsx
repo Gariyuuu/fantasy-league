@@ -1,0 +1,110 @@
+import { useMemo, useState } from 'react'
+import type { LeagueState, Team } from '../../types'
+import { rankAvailablePlayers, unmetPositionNeeds } from '../../engine/valuation'
+import { positionColor } from './positionColors'
+
+interface Props {
+  state: LeagueState
+  humanTeam: Team | undefined
+  isHumanTurn: boolean
+  onDraft: (playerId: string) => void
+}
+
+const TABS = ['ALL', 'QB', 'RB', 'WR', 'TE', 'K', 'DST'] as const
+
+export function BestAvailableList({ state, humanTeam, isHumanTurn, onDraft }: Props) {
+  const [tab, setTab] = useState<(typeof TABS)[number]>('ALL')
+  const [search, setSearch] = useState('')
+
+  const needs = useMemo(
+    () => new Set(humanTeam ? unmetPositionNeeds(humanTeam.roster, state.players, state.config) : []),
+    [humanTeam, state.players, state.config],
+  )
+
+  const ranked = useMemo(() => {
+    const weights = state.config.scoringPresets[state.scoringPreset].weights
+    const draftedIds = new Set(state.draft.picks.map((p) => p.playerId))
+    const all = rankAvailablePlayers(Object.values(state.players), draftedIds, weights)
+    const byTab = tab === 'ALL' ? all : all.filter((r) => r.player.positions.includes(tab))
+    const query = search.trim().toLowerCase()
+    const bySearch = query ? byTab.filter((r) => r.player.name.toLowerCase().includes(query)) : byTab
+    return tab === 'ALL' && !query ? bySearch.slice(0, 50) : bySearch
+  }, [state.draft.picks.length, state.players, state.config, state.scoringPreset, tab, search])
+
+  return (
+    <div className="flex h-full flex-col rounded-lg border border-zinc-800 bg-zinc-900">
+      <div className="space-y-2 border-b border-zinc-800 p-2">
+        <div className="flex gap-1">
+          {TABS.map((t) => (
+            <button
+              key={t}
+              type="button"
+              onClick={() => setTab(t)}
+              className={`rounded px-2 py-1 text-xs font-medium ${
+                tab === t ? 'bg-emerald-500 text-zinc-950' : 'text-zinc-400 hover:bg-zinc-800'
+              }`}
+            >
+              {t}
+            </button>
+          ))}
+        </div>
+        <input
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Search players…"
+          className="w-full rounded border border-zinc-800 bg-zinc-950 px-2 py-1 text-xs text-zinc-200 placeholder:text-zinc-600 focus:border-emerald-500 focus:outline-none"
+        />
+      </div>
+      <div className="flex-1 overflow-y-auto">
+        <table className="w-full text-sm">
+          <tbody>
+            {ranked.map(({ player, value }) => {
+              const isNeed = player.positions.some((pos) => needs.has(pos))
+              return (
+                <tr
+                  key={player.id}
+                  className={`border-b border-zinc-800/60 hover:bg-zinc-800/40 ${isNeed ? 'bg-emerald-500/[0.04]' : ''}`}
+                >
+                  <td className="px-3 py-2">
+                    <span
+                      className={`rounded border px-1.5 py-0.5 text-[10px] font-semibold ${positionColor(player.positions[0])}`}
+                    >
+                      {player.positions[0]}
+                    </span>
+                  </td>
+                  <td className="px-2 py-2 font-medium text-zinc-200">
+                    {player.name}
+                    {isNeed && (
+                      <span className="ml-1.5 rounded bg-emerald-500/15 px-1 py-0.5 text-[9px] font-semibold text-emerald-400">
+                        NEED
+                      </span>
+                    )}
+                  </td>
+                  <td className="px-2 py-2 text-xs text-zinc-500">{player.team}</td>
+                  <td className="px-2 py-2 text-right font-mono text-xs text-zinc-400">{value.toFixed(1)}</td>
+                  <td className="px-3 py-2 text-right">
+                    <button
+                      type="button"
+                      disabled={!isHumanTurn}
+                      onClick={() => onDraft(player.id)}
+                      className="rounded bg-emerald-500 px-2 py-1 text-[11px] font-semibold text-zinc-950 disabled:cursor-not-allowed disabled:bg-zinc-800 disabled:text-zinc-600"
+                    >
+                      Draft
+                    </button>
+                  </td>
+                </tr>
+              )
+            })}
+            {ranked.length === 0 && (
+              <tr>
+                <td colSpan={5} className="px-3 py-6 text-center text-xs text-zinc-600">
+                  No players match.
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  )
+}

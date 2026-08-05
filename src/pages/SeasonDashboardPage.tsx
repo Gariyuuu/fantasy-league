@@ -1,0 +1,112 @@
+import { useEffect } from 'react'
+import { Link, useParams } from 'react-router-dom'
+import { useLeagueStore } from '../store/useLeagueStore'
+import { LeagueNav } from '../components/LeagueNav'
+import { StandingsTable } from '../components/season/StandingsTable'
+import { MatchupResults } from '../components/season/MatchupResults'
+import { PlayoffBracketView } from '../components/season/PlayoffBracketView'
+import { draftRounds } from '../engine/draft'
+
+export function SeasonDashboardPage() {
+  const { leagueId } = useParams<{ leagueId: string }>()
+  const state = useLeagueStore((s) => s.state)
+  const loadLeague = useLeagueStore((s) => s.loadLeague)
+  const advanceWeek = useLeagueStore((s) => s.advanceWeek)
+  const isAdvancingWeek = useLeagueStore((s) => s.isAdvancingWeek)
+
+  useEffect(() => {
+    if (leagueId && state?.id !== leagueId) {
+      void loadLeague(leagueId)
+    }
+  }, [leagueId, state?.id, loadLeague])
+
+  if (!state || state.id !== leagueId) {
+    return <div className="flex min-h-svh items-center justify-center bg-zinc-950 text-zinc-500">Loading league…</div>
+  }
+
+  const humanTeam = state.teams.find((t) => t.isHuman)
+  const isPlayoffs = state.phase === 'playoffs'
+  const isComplete = state.phase === 'complete'
+  const isCumulative = state.config.engine !== 'headToHead'
+  const lastPlayedPeriod = state.currentPeriod - 1
+
+  const currentBracketRound = state.playoffs?.[state.playoffs.length - 1]
+  const humanIsAlive =
+    !isPlayoffs || !currentBracketRound || !humanTeam
+      ? true
+      : currentBracketRound.matchups.some((m) => m.homeTeamId === humanTeam.id || m.awayTeamId === humanTeam.id)
+
+  const statusLabel = isComplete
+    ? 'Season complete.'
+    : isPlayoffs
+      ? `Playoffs — Round ${currentBracketRound?.round ?? 1}${humanTeam && !humanIsAlive ? '. Your season is over — follow the bracket below.' : ''}`
+      : `Set your lineup, then advance the ${state.config.season.periodLabel.toLowerCase()} to see how it plays out.`
+
+  return (
+    <div className="min-h-svh bg-zinc-950 p-6 text-zinc-200">
+      <div className="mx-auto max-w-5xl space-y-4">
+        <LeagueNav state={state} />
+
+        <div className="flex items-center justify-between rounded-lg border border-zinc-800 bg-zinc-900 px-6 py-4">
+          <div>
+            <p className="text-xs uppercase tracking-wide text-zinc-500">
+              {isPlayoffs || isComplete
+                ? `${state.config.season.periodLabel} ${Math.min(state.currentPeriod, state.config.season.totalPeriods)}`
+                : `${state.config.season.periodLabel} ${state.currentPeriod} of ${state.config.season.totalPeriods}`}
+            </p>
+            <p className="mt-1 text-zinc-300">{statusLabel}</p>
+          </div>
+          <div className="flex gap-2">
+            {humanTeam && !isComplete && humanIsAlive && (
+              <Link
+                to={`/league/${state.id}/${state.config.engine === 'salaryCapField' ? 'event' : 'lineup'}`}
+                className="rounded-md border border-zinc-700 px-4 py-2 text-sm font-medium text-zinc-200 hover:border-zinc-600"
+              >
+                {state.config.engine === 'salaryCapField' ? 'Set Field' : 'Edit Lineup'}
+              </Link>
+            )}
+            {!isComplete && (
+              <button
+                type="button"
+                disabled={isAdvancingWeek}
+                onClick={() => void advanceWeek()}
+                className="rounded-md bg-emerald-500 px-4 py-2 text-sm font-semibold text-zinc-950 hover:bg-emerald-400 disabled:opacity-50"
+              >
+                {isAdvancingWeek ? 'Simulating…' : isPlayoffs ? 'Play Round' : `Advance ${state.config.season.periodLabel} ${state.currentPeriod}`}
+              </button>
+            )}
+          </div>
+        </div>
+
+        {(isPlayoffs || isComplete) && <PlayoffBracketView state={state} />}
+
+        {isCumulative ? (
+          <StandingsTable state={state} />
+        ) : (
+          <div className="grid grid-cols-12 gap-4">
+            <div className="col-span-7">
+              <StandingsTable state={state} />
+            </div>
+            <div className="col-span-5">
+              {lastPlayedPeriod >= 1 ? (
+                <MatchupResults state={state} period={lastPlayedPeriod} />
+              ) : (
+                <div className="rounded-lg border border-zinc-800 bg-zinc-900 p-4 text-xs text-zinc-600">
+                  No {state.config.season.periodLabel.toLowerCase()}s played yet.
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        <p className="text-xs text-zinc-600">
+          {isCumulative
+            ? `Cumulative leaderboard — every ${state.config.season.periodLabel.toLowerCase()}'s score adds to your season total, no opponents.`
+            : `${draftRounds(state.config)}-player rosters · lineups lock when you advance the ${state.config.season.periodLabel.toLowerCase()} (per-player game-time locks aren't modeled — fixtures don't carry individual kickoff times).`}
+          {state.config.playoffs &&
+            ` Top ${state.config.playoffs.teamCount} make the playoffs; standings freeze once the bracket starts.`}
+        </p>
+      </div>
+    </div>
+  )
+}

@@ -1,0 +1,109 @@
+import type { SportConfig } from '../../types'
+
+// Weight key collisions matter: a QB's thrown interceptions and a defense's
+// takeaways are both plausible "interceptions" but score with opposite
+// sign, so they get distinct stat keys (interceptionsThrown vs.
+// defInterceptions) rather than sharing one that a single weights map
+// couldn't score correctly for both positions.
+export const nflConfig: SportConfig = {
+  id: 'nfl',
+  label: 'NFL',
+  engine: 'headToHead',
+  season: {
+    startDate: '2026-09-10',
+    periodLabel: 'Week',
+    totalPeriods: 17,
+  },
+  positions: ['QB', 'RB', 'WR', 'TE', 'K', 'DST'],
+  roster: [
+    { slot: 'QB', eligiblePositions: ['QB'], count: 1 },
+    { slot: 'RB', eligiblePositions: ['RB'], count: 2 },
+    { slot: 'WR', eligiblePositions: ['WR'], count: 2 },
+    { slot: 'TE', eligiblePositions: ['TE'], count: 1 },
+    { slot: 'FLEX', eligiblePositions: ['RB', 'WR', 'TE'], count: 1 },
+    { slot: 'DST', eligiblePositions: ['DST'], count: 1 },
+    { slot: 'K', eligiblePositions: ['K'], count: 1 },
+    {
+      slot: 'BN',
+      eligiblePositions: ['QB', 'RB', 'WR', 'TE', 'K', 'DST'],
+      count: 6,
+      isBench: true,
+    },
+  ],
+  scoringPresets: {
+    standard: {
+      id: 'standard',
+      label: 'Standard',
+      weights: {
+        passingYards: 0.04,
+        passingTDs: 4,
+        interceptionsThrown: -2,
+        rushingYards: 0.1,
+        rushingTDs: 6,
+        receptions: 0,
+        receivingYards: 0.1,
+        receivingTDs: 6,
+        fumblesLost: -2,
+        fieldGoalsMade: 3,
+        extraPointsMade: 1,
+        sacks: 1,
+        defInterceptions: 2,
+        fumbleRecoveries: 2,
+        defensiveTDs: 6,
+        safeties: 2,
+        pointsAllowed: -0.1,
+      },
+    },
+    ppr: {
+      id: 'ppr',
+      label: 'PPR',
+      weights: {
+        passingYards: 0.04,
+        passingTDs: 4,
+        interceptionsThrown: -2,
+        rushingYards: 0.1,
+        rushingTDs: 6,
+        receptions: 1,
+        receivingYards: 0.1,
+        receivingTDs: 6,
+        fumblesLost: -2,
+        fieldGoalsMade: 3,
+        extraPointsMade: 1,
+        sacks: 1,
+        defInterceptions: 2,
+        fumbleRecoveries: 2,
+        defensiveTDs: 6,
+        safeties: 2,
+        pointsAllowed: -0.1,
+      },
+    },
+    custom: {
+      id: 'custom',
+      label: 'Custom',
+      weights: {
+        passingYards: 0.04,
+        passingTDs: 4,
+        interceptionsThrown: -2,
+        rushingYards: 0.1,
+        rushingTDs: 6,
+        receptions: 0.5,
+        receivingYards: 0.1,
+        receivingTDs: 6,
+        fumblesLost: -2,
+        fieldGoalsMade: 3,
+        extraPointsMade: 1,
+        sacks: 1,
+        defInterceptions: 2,
+        fumbleRecoveries: 2,
+        defensiveTDs: 6,
+        safeties: 2,
+        pointsAllowed: -0.1,
+      },
+    },
+  },
+  draft: { type: 'snake', rounds: 15, pickTimeSeconds: 60 },
+  lineupLock: 'perPlayerGameTime',
+  // 15 regular-season weeks, then a 4-team single-elimination bracket over
+  // the final 2 weeks (semifinal, championship).
+  playoffs: { teamCount: 4, weeks: 2 },
+}
