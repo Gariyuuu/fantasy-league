@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom'
 import { useLeagueStore } from '../store/useLeagueStore'
 import { LeagueNav } from '../components/LeagueNav'
 import { projectedPoints } from '../engine/valuation'
+import { LeagueBackdrop } from '../components/LeagueBackdrop'
 
 export function EventLobbyPage() {
   const { leagueId } = useParams<{ leagueId: string }>()
@@ -70,7 +71,7 @@ export function EventLobbyPage() {
   }
 
   return (
-    <div className="min-h-svh p-6">
+    <LeagueBackdrop sport={state.sport} className="p-6">
       <div className="mx-auto max-w-3xl space-y-4">
         <LeagueNav state={state} />
 
@@ -131,6 +132,6 @@ export function EventLobbyPage() {
           </table>
         </div>
       </div>
-    </div>
+    </LeagueBackdrop>
   )
 }

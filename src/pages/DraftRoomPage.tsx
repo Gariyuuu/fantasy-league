@@ -8,6 +8,7 @@ import { RosterGrid } from '../components/draft/RosterGrid'
 import { PositionNeed } from '../components/draft/PositionNeed'
 import { draftRounds } from '../engine/draft'
 import { SPORT_ICONS } from '../components/sportMeta'
+import { LeagueBackdrop } from '../components/LeagueBackdrop'
 
 export function DraftRoomPage() {
   const { leagueId } = useParams<{ leagueId: string }>()
@@ -37,7 +38,7 @@ export function DraftRoomPage() {
   const picksMade = state.draft.picks.length
 
   return (
-    <div className="min-h-svh p-6 text-zinc-200">
+    <LeagueBackdrop sport={state.sport} className="p-6 text-zinc-200">
       <div className="mx-auto max-w-7xl space-y-4">
         <div className="app-card flex items-center justify-between px-5 py-3.5">
           <div className="flex items-center gap-3">
@@ -108,6 +109,6 @@ export function DraftRoomPage() {
           </>
         )}
       </div>
-    </div>
+    </LeagueBackdrop>
   )
 }

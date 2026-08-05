@@ -5,6 +5,7 @@ import { LeagueNav } from '../components/LeagueNav'
 import { positionColor } from '../components/draft/positionColors'
 import { assignmentsFromLineup, buildOptimalLineup, expandSlotInstances, lineupFromAssignments } from '../engine/lineup'
 import { projectedPoints } from '../engine/valuation'
+import { LeagueBackdrop } from '../components/LeagueBackdrop'
 
 export function LineupPage() {
   const { leagueId } = useParams<{ leagueId: string }>()
@@ -54,7 +55,7 @@ export function LineupPage() {
 
   if (isComplete || (isPlayoffs && !humanIsAlive)) {
     return (
-      <div className="min-h-svh p-6">
+      <LeagueBackdrop sport={state.sport} className="p-6">
         <div className="mx-auto max-w-3xl space-y-4">
           <LeagueNav state={state} />
           <div className="app-card p-6 text-center text-zinc-400">
@@ -65,7 +66,7 @@ export function LineupPage() {
             .
           </div>
         </div>
-      </div>
+      </LeagueBackdrop>
     )
   }
 
@@ -139,7 +140,7 @@ export function LineupPage() {
   }
 
   return (
-    <div className="min-h-svh p-6">
+    <LeagueBackdrop sport={state.sport} className="p-6">
       <div className="mx-auto max-w-3xl space-y-4">
         <LeagueNav state={state} />
 
@@ -170,6 +171,6 @@ export function LineupPage() {
           {benchInstances.map(renderRow)}
         </div>
       </div>
-    </div>
+    </LeagueBackdrop>
   )
 }

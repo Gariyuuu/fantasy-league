@@ -5,6 +5,7 @@ import { LeagueNav } from '../components/LeagueNav'
 import { positionColor } from '../components/draft/positionColors'
 import { projectedPoints } from '../engine/valuation'
 import type { TradeResponse } from '../types'
+import { LeagueBackdrop } from '../components/LeagueBackdrop'
 
 export function TradesPage() {
   const { leagueId } = useParams<{ leagueId: string }>()
@@ -102,7 +103,7 @@ export function TradesPage() {
   )
 
   return (
-    <div className="min-h-svh p-6">
+    <LeagueBackdrop sport={state.sport} className="p-6">
       <div className="mx-auto max-w-4xl space-y-4">
         <LeagueNav state={state} />
 
@@ -206,6 +207,6 @@ export function TradesPage() {
           </div>
         )}
       </div>
-    </div>
+    </LeagueBackdrop>
   )
 }

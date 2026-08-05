@@ -6,6 +6,7 @@ import { StandingsTable } from '../components/season/StandingsTable'
 import { MatchupResults } from '../components/season/MatchupResults'
 import { PlayoffBracketView } from '../components/season/PlayoffBracketView'
 import { draftRounds } from '../engine/draft'
+import { LeagueBackdrop } from '../components/LeagueBackdrop'
 
 export function SeasonDashboardPage() {
   const { leagueId } = useParams<{ leagueId: string }>()
@@ -43,7 +44,7 @@ export function SeasonDashboardPage() {
       : `Set your lineup, then advance the ${state.config.season.periodLabel.toLowerCase()} to see how it plays out.`
 
   return (
-    <div className="min-h-svh p-6">
+    <LeagueBackdrop sport={state.sport} className="p-6">
       <div className="mx-auto max-w-5xl space-y-4">
         <LeagueNav state={state} />
 
@@ -102,6 +103,6 @@ export function SeasonDashboardPage() {
             ` Top ${state.config.playoffs.teamCount} make the playoffs; standings freeze once the bracket starts.`}
         </p>
       </div>
-    </div>
+    </LeagueBackdrop>
   )
 }
