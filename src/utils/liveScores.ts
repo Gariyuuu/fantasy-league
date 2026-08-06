@@ -11,6 +11,7 @@ const ESPN_PATH: Record<SportId, string> = {
   epl: 'soccer/eng.1',
   mlb: 'baseball/mlb',
   wnba: 'basketball/wnba',
+  nba: 'basketball/nba',
   mls: 'soccer/usa.1',
   pga: 'golf/pga',
   tennis: 'tennis/atp',

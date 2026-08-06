@@ -6,6 +6,7 @@ export const SPORT_ICONS: Record<SportId, string> = {
   epl: '⚽',
   mlb: '⚾',
   wnba: '🏀',
+  nba: '🏀',
   mls: '⚽',
   pga: '⛳',
   tennis: '🎾',

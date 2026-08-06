@@ -12,6 +12,7 @@ const ALL_SPORTS: { id: SportId; label: string; engine: string }[] = [
   { id: 'epl', label: 'Soccer (EPL)', engine: 'Head-to-head weekly' },
   { id: 'mlb', label: 'MLB', engine: 'Daily rolling points' },
   { id: 'wnba', label: 'WNBA', engine: 'Daily rolling points' },
+  { id: 'nba', label: 'NBA', engine: 'Daily rolling points' },
   { id: 'mls', label: 'MLS', engine: 'Daily rolling points' },
   { id: 'pga', label: 'PGA Tour', engine: 'Salary-cap field' },
   { id: 'tennis', label: 'Tennis', engine: 'Salary-cap field' },

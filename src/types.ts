@@ -15,6 +15,7 @@ export type SportId =
   // Engine B — daily/rolling points
   | 'mlb'
   | 'wnba'
+  | 'nba'
   | 'mls'
   // Engine C — salary-cap field selection
   | 'pga'

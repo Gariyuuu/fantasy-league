@@ -4,6 +4,7 @@ import { cfbConfig } from './cfb'
 import { eplConfig } from './epl'
 import { mlbConfig } from './mlb'
 import { wnbaConfig } from './wnba'
+import { nbaConfig } from './nba'
 import { mlsConfig } from './mls'
 import { pgaConfig } from './pga'
 import { tennisConfig } from './tennis'
@@ -22,6 +23,7 @@ export const sportConfigs: Partial<Record<SportId, SportConfig>> = {
   epl: eplConfig,
   mlb: mlbConfig,
   wnba: wnbaConfig,
+  nba: nbaConfig,
   mls: mlsConfig,
   pga: pgaConfig,
   tennis: tennisConfig,
