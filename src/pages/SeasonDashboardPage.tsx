@@ -7,6 +7,7 @@ import { MatchupResults } from '../components/season/MatchupResults'
 import { PlayoffBracketView } from '../components/season/PlayoffBracketView'
 import { draftRounds } from '../engine/draft'
 import { LeagueBackdrop } from '../components/LeagueBackdrop'
+import { LiveScoresTicker } from '../components/LiveScoresTicker'
 
 export function SeasonDashboardPage() {
   const { leagueId } = useParams<{ leagueId: string }>()
@@ -47,6 +48,8 @@ export function SeasonDashboardPage() {
     <LeagueBackdrop sport={state.sport} className="p-6">
       <div className="mx-auto max-w-5xl space-y-4">
         <LeagueNav state={state} />
+
+        <LiveScoresTicker sport={state.sport} />
 
         <div className="app-card flex items-center justify-between px-6 py-4">
           <div>

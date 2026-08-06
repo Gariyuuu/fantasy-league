@@ -5,6 +5,7 @@ import { LeagueNav } from '../components/LeagueNav'
 import { projectedPoints } from '../engine/valuation'
 import { LeagueBackdrop } from '../components/LeagueBackdrop'
 import { FIELD_NOUN, SPORT_ICONS } from '../components/sportMeta'
+import { LiveScoresTicker } from '../components/LiveScoresTicker'
 
 export function EventLobbyPage() {
   const { leagueId } = useParams<{ leagueId: string }>()
@@ -75,6 +76,8 @@ export function EventLobbyPage() {
     <LeagueBackdrop sport={state.sport} className="p-6">
       <div className="mx-auto max-w-3xl space-y-4">
         <LeagueNav state={state} />
+
+        <LiveScoresTicker sport={state.sport} />
 
         <div className="app-card flex items-center justify-between px-4 py-3">
           <div className="text-sm text-zinc-400">
