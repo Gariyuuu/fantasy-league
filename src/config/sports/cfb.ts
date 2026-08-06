@@ -1,20 +1,18 @@
 import type { SportConfig } from '../../types'
 
-// Weight key collisions matter: a QB's thrown interceptions and a defense's
-// takeaways are both plausible "interceptions" but score with opposite
-// sign, so they get distinct stat keys (interceptionsThrown vs.
-// defInterceptions) rather than sharing one that a single weights map
-// couldn't score correctly for both positions.
-export const nflConfig: SportConfig = {
-  id: 'nfl',
-  label: 'NFL',
+// Reuses NFL's stat-key vocabulary (passingYards, defInterceptions, etc.) —
+// college football box scores map onto the same categories, so there's no
+// need to invent a parallel schema.
+export const cfbConfig: SportConfig = {
+  id: 'cfb',
+  label: 'College Football',
   engine: 'headToHead',
   season: {
-    startDate: '2026-09-10',
+    startDate: '2026-08-29',
     periodLabel: 'Week',
-    totalPeriods: 17,
+    totalPeriods: 14,
   },
-  realSeasonWindow: { start: '2026-09-10', end: '2027-02-14' },
+  realSeasonWindow: { start: '2026-08-29', end: '2027-01-20' },
   positions: ['QB', 'RB', 'WR', 'TE', 'K', 'DST'],
   roster: [
     { slot: 'QB', eligiblePositions: ['QB'], count: 1 },
@@ -104,7 +102,8 @@ export const nflConfig: SportConfig = {
   },
   draft: { type: 'snake', rounds: 15, pickTimeSeconds: 60 },
   lineupLock: 'perPlayerGameTime',
-  // 15 regular-season weeks, then a 4-team single-elimination bracket over
-  // the final 2 weeks (semifinal, championship).
+  // 12 regular-season weeks, then a 4-team single-elimination bracket over
+  // the final 2 weeks (semifinal, championship) — mirrors the College
+  // Football Playoff structure at a manageable scale for an 8-team league.
   playoffs: { teamCount: 4, weeks: 2 },
 }

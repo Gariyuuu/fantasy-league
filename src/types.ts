@@ -55,6 +55,8 @@ export interface SportConfig {
     periodLabel: string
     totalPeriods: number
   }
+  /** Real-world calendar window (ISO dates, ~2026) this sport's actual season runs — independent of `season` above, which paces the in-app simulation. Used only to gate whether a sport is selectable at league creation ("opens" automatically once the real season starts). */
+  realSeasonWindow: { start: string; end: string }
   positions: string[]
   roster: RosterSlotConfig[]
   /** engine C only: athletes picked per event */

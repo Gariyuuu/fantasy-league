@@ -35,6 +35,7 @@ const stubConfig: SportConfig = {
   label: 'NFL',
   engine: 'headToHead',
   season: { startDate: '2026-09-10', periodLabel: 'Week', totalPeriods: 17 },
+  realSeasonWindow: { start: '2026-09-10', end: '2027-02-14' },
   positions: ['QB', 'RB', 'WR', 'TE'],
   roster: [{ slot: 'QB', eligiblePositions: ['QB'], count: 1 }],
   scoringPresets: {

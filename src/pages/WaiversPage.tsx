@@ -6,15 +6,14 @@ import { positionColor } from '../components/draft/positionColors'
 import { projectedPoints } from '../engine/valuation'
 import { LeagueBackdrop } from '../components/LeagueBackdrop'
 
-const TABS = ['ALL', 'QB', 'RB', 'WR', 'TE', 'K', 'DST'] as const
-
 export function WaiversPage() {
   const { leagueId } = useParams<{ leagueId: string }>()
   const state = useLeagueStore((s) => s.state)
   const loadLeague = useLeagueStore((s) => s.loadLeague)
   const submitHumanWaiverClaim = useLeagueStore((s) => s.submitHumanWaiverClaim)
 
-  const [tab, setTab] = useState<(typeof TABS)[number]>('ALL')
+  const tabs = useMemo(() => ['ALL', ...(state?.config.positions ?? [])], [state?.config.positions])
+  const [tab, setTab] = useState<string>('ALL')
   const [selectedAddId, setSelectedAddId] = useState<string | null>(null)
   const [dropId, setDropId] = useState<string>('')
   const [bid, setBid] = useState(1)
@@ -119,8 +118,8 @@ export function WaiversPage() {
         {submitted && !selectedAddId && <p className="text-xs font-semibold text-emerald-400">✓ Claim submitted.</p>}
 
         <div className="app-card">
-          <div className="flex gap-1 border-b border-zinc-800/80 p-2">
-            {TABS.map((t) => (
+          <div className="flex flex-wrap gap-1 border-b border-zinc-800/80 p-2">
+            {tabs.map((t) => (
               <button
                 key={t}
                 type="button"

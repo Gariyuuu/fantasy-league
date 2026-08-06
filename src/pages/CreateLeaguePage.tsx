@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useLeagueStore } from '../store/useLeagueStore'
 import { sportConfigs } from '../config/sports'
 import { SPORT_ICONS } from '../components/sportMeta'
+import { isInSeasonNow, formatSeasonOpensLabel } from '../utils/seasonWindow'
 import type { Difficulty, ScoringPresetId, SportId } from '../types'
 
 const ALL_SPORTS: { id: SportId; label: string; engine: string }[] = [
@@ -17,12 +18,19 @@ const ALL_SPORTS: { id: SportId; label: string; engine: string }[] = [
   { id: 'nascar', label: 'NASCAR Cup', engine: 'Salary-cap field' },
 ]
 
+function isSelectable(id: SportId): boolean {
+  const config = sportConfigs[id]
+  return Boolean(config) && isInSeasonNow(config!)
+}
+
+const DEFAULT_SPORT: SportId = ALL_SPORTS.find((s) => isSelectable(s.id))?.id ?? 'nfl'
+
 export function CreateLeaguePage() {
   const navigate = useNavigate()
   const createLeague = useLeagueStore((s) => s.createLeague)
   const [name, setName] = useState('My League')
   const [humanTeamName, setHumanTeamName] = useState('My Team')
-  const [sport, setSport] = useState<SportId>('nfl')
+  const [sport, setSport] = useState<SportId>(DEFAULT_SPORT)
   const [scoringPreset, setScoringPreset] = useState<ScoringPresetId>('standard')
   const [difficulty, setDifficulty] = useState<Difficulty>('normal')
   const [isCreating, setIsCreating] = useState(false)
@@ -70,11 +78,15 @@ export function CreateLeaguePage() {
           </div>
 
           <div>
-            <p className="mb-2 text-sm font-medium text-zinc-400">Sport (in season now)</p>
+            <p className="mb-2 text-sm font-medium text-zinc-400">
+              Sport <span className="text-zinc-600">— options open automatically when that sport's real season starts</span>
+            </p>
             <div className="grid grid-cols-3 gap-2.5">
               {ALL_SPORTS.map((s) => {
-                const available = Boolean(sportConfigs[s.id])
+                const config = sportConfigs[s.id]
+                const available = Boolean(config) && isInSeasonNow(config!)
                 const selected = sport === s.id
+                const statusLabel = !config ? 'Coming soon' : formatSeasonOpensLabel(config)
                 return (
                   <button
                     type="button"
@@ -91,7 +103,7 @@ export function CreateLeaguePage() {
                   >
                     <div className="mb-1 text-xl">{SPORT_ICONS[s.id]}</div>
                     <div className="font-semibold">{s.label}</div>
-                    <div className="text-xs opacity-70">{available ? s.engine : 'Coming soon'}</div>
+                    <div className={`text-xs ${available ? 'font-semibold text-emerald-400' : 'opacity-70'}`}>{statusLabel}</div>
                   </button>
                 )
               })}

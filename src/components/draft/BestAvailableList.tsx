@@ -10,10 +10,9 @@ interface Props {
   onDraft: (playerId: string) => void
 }
 
-const TABS = ['ALL', 'QB', 'RB', 'WR', 'TE', 'K', 'DST'] as const
-
 export function BestAvailableList({ state, humanTeam, isHumanTurn, onDraft }: Props) {
-  const [tab, setTab] = useState<(typeof TABS)[number]>('ALL')
+  const tabs = useMemo(() => ['ALL', ...state.config.positions], [state.config.positions])
+  const [tab, setTab] = useState<string>('ALL')
   const [search, setSearch] = useState('')
 
   const needs = useMemo(
@@ -34,8 +33,8 @@ export function BestAvailableList({ state, humanTeam, isHumanTurn, onDraft }: Pr
   return (
     <div className="app-card flex h-full flex-col">
       <div className="space-y-2 border-b border-zinc-800/80 p-2.5">
-        <div className="flex gap-1">
-          {TABS.map((t) => (
+        <div className="flex flex-wrap gap-1">
+          {tabs.map((t) => (
             <button
               key={t}
               type="button"

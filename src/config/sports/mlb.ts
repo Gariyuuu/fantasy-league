@@ -12,6 +12,7 @@ export const mlbConfig: SportConfig = {
     periodLabel: 'Day',
     totalPeriods: 45,
   },
+  realSeasonWindow: { start: '2026-03-26', end: '2026-11-01' },
   positions: ['C', '1B', '2B', '3B', 'SS', 'OF', 'SP', 'RP'],
   roster: [
     { slot: 'C', eligiblePositions: ['C'], count: 1 },

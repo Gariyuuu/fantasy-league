@@ -1,0 +1,15 @@
+{
+  "Atlanta": { "G1": "Allisha Gray", "G2": "Jordin Canada", "G3": "Rhyne Howard", "F1": "Angel Reese", "F2": "Brionna Jones", "F3": "Naz Hillmon", "C1": "Madina Okot", "C2": "Sika Kone" },
+  "Chicago": { "G1": "Skylar Diggins", "G2": "Courtney Vandersloot", "G3": "DiJonai Carrington", "F1": "Rickea Jackson", "F2": "Maddy Westbeld", "F3": "Elizabeth Williams", "C1": "Kamilla Cardoso", "C2": "Azura Stevens" },
+  "Connecticut": { "G1": "Hailey Van Lith", "G2": "Saniya Rivers", "G3": "Leila Lacan", "F1": "Aaliyah Edwards", "F2": "Diamond Miller", "F3": "Rayah Marshall", "C1": "Brittney Griner", "C2": "Olivia Nelson-Ododa" },
+  "Dallas": { "G1": "Paige Bueckers", "G2": "Arike Ogunbowale", "G3": "Aziaha James", "F1": "Alanna Smith", "F2": "Azzi Fudd", "F3": "Alysha Clark", "C1": "Li Yueru", "C2": "Jessica Shepard" },
+  "Golden State": { "G1": "Veronica Burton", "G2": "Kaitlyn Chen", "G3": "Tiffany Hayes", "F1": "Gabby Williams", "F2": "Cecilia Zandalasini", "F3": "Janelle Salaun", "C1": "Kiah Stokes", "C2": "Ashten Prechtel" },
+  "Indiana": { "G1": "Caitlin Clark", "G2": "Kelsey Mitchell", "G3": "Sophie Cunningham", "F1": "Myisha Hines-Allen", "F2": "Monique Billings", "F3": "Makayla Timpson", "C1": "Aliyah Boston", "C2": "Damiris Dantas" },
+  "Las Vegas": { "G1": "Jackie Young", "G2": "Chelsea Gray", "G3": "Jewell Loyd", "F1": "Brianna Turner", "F2": "NaLyssa Smith", "F3": "Janiah Barker", "C1": "A'ja Wilson", "C2": "Justine Pissott" },
+  "LA Sparks": { "G1": "Ariel Atkins", "G2": "Kate Martin", "G3": "Monique Akoa Makani", "F1": "Nneka Ogwumike", "F2": "Dearica Hamby", "F3": "Alissa Pili", "C1": "Cameron Brink", "C2": "Emma Cannon" },
+  "Minnesota": { "G1": "Kayla McBride", "G2": "Courtney Williams", "G3": "Olivia Miles", "F1": "Napheesa Collier", "F2": "Natasha Howard", "F3": "Nia Coffey", "C1": "Dorka Juhasz", "C2": "Teaira McCowan" },
+  "New York": { "G1": "Sabrina Ionescu", "G2": "Betnijah Laney-Hamilton", "G3": "Marine Johannes", "F1": "Breanna Stewart", "F2": "Satou Sabally", "F3": "Leonie Fiebich", "C1": "Jonquel Jones", "C2": "Han Xu" },
+  "Phoenix": { "G1": "Kelsey Plum", "G2": "Kahleah Copper", "G3": "DeWanna Bonner", "F1": "Alyssa Thomas", "F2": "Marta Suarez", "F3": "Noemie Brochant", "C1": "Kyara Linskens", "C2": "Natasha Mack" },
+  "Seattle": { "G1": "Flau'Jae Johnson", "G2": "Zia Cooke", "G3": "Natisha Hiedeman", "F1": "Ezi Magbegor", "F2": "Jordan Horston", "F3": "Katie Lou Samuelson", "C1": "Dominique Malonga", "C2": "Stefanie Dolson" },
+  "Washington": { "G1": "Sonia Citron", "G2": "Georgia Amoore", "G3": "Lucy Olsen", "F1": "Kiki Iriafen", "F2": "Angela Dugalic", "F3": "Cotie McMahon", "C1": "Lauren Betts", "C2": "Shakira Austin" }
+}

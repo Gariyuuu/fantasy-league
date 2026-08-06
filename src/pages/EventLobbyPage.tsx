@@ -4,6 +4,7 @@ import { useLeagueStore } from '../store/useLeagueStore'
 import { LeagueNav } from '../components/LeagueNav'
 import { projectedPoints } from '../engine/valuation'
 import { LeagueBackdrop } from '../components/LeagueBackdrop'
+import { FIELD_NOUN, SPORT_ICONS } from '../components/sportMeta'
 
 export function EventLobbyPage() {
   const { leagueId } = useParams<{ leagueId: string }>()
@@ -77,7 +78,8 @@ export function EventLobbyPage() {
 
         <div className="app-card flex items-center justify-between px-4 py-3">
           <div className="text-sm text-zinc-400">
-            ⛳ {state.config.season.periodLabel} {state.currentPeriod} — pick {fieldSize} golfers under the salary cap
+            {SPORT_ICONS[state.sport]} {state.config.season.periodLabel} {state.currentPeriod} — pick {fieldSize}{' '}
+            {FIELD_NOUN[state.sport] ?? 'players'} under the salary cap
           </div>
           <div className="flex items-center gap-4 text-sm">
             <span className="stat-number text-zinc-300">
@@ -103,7 +105,7 @@ export function EventLobbyPage() {
             <thead>
               <tr className="border-b border-zinc-800/80 text-left text-xs font-bold uppercase tracking-wide text-zinc-500">
                 <th className="px-3 py-2.5"></th>
-                <th className="px-3 py-2.5">Golfer</th>
+                <th className="px-3 py-2.5">Name</th>
                 <th className="px-3 py-2.5 text-right">Salary</th>
                 <th className="px-3 py-2.5 text-right">Proj.</th>
               </tr>

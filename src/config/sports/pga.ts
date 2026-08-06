@@ -14,6 +14,7 @@ export const pgaConfig: SportConfig = {
     periodLabel: 'Event',
     totalPeriods: 4,
   },
+  realSeasonWindow: { start: '2026-01-08', end: '2026-09-01' },
   positions: ['GOLFER'],
   roster: [{ slot: 'FIELD', eligiblePositions: ['GOLFER'], count: 6 }],
   fieldSize: 6,

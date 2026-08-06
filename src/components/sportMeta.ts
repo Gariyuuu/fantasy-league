@@ -12,6 +12,13 @@ export const SPORT_ICONS: Record<SportId, string> = {
   nascar: '🏁',
 }
 
+/** Noun for engine C's "pick N ___" field-selection copy, per sport. */
+export const FIELD_NOUN: Partial<Record<SportId, string>> = {
+  pga: 'golfers',
+  tennis: 'players',
+  nascar: 'drivers',
+}
+
 export function phaseBadgeClass(phase: LeaguePhase): string {
   switch (phase) {
     case 'predraft':
