@@ -2,15 +2,29 @@
 
 No CHANGELOG.md existed before this documentation audit. The entries below for prior work are reconstructed from `git log` (commit hashes/dates/messages) — not from any pre-existing changelog — and are dated by commit date, not by any separately-recorded release date (none exist).
 
-## [Unreleased] — Documentation/handoff audit — 2026-08-06
+## [Unreleased] — CHECKPOINT-3 final transfer checkpoint — 2026-08-07
 
-A full repository audit was performed and a permanent documentation/memory system was created for this project, per an explicit user request to prepare for a clean account handoff.
+A further, independent verification pass (zero access to either prior checkpoint's conversation), requested as a "final transfer checkpoint" before handing the repo to a different Claude Code account.
+
+**Fixed**:
+- `README.md`'s stale sport table/prose (`TASKS.md` DOC-1) — corrected from "Three sports ship today" / "all five sport configs" to list all 10 sports and their real engines.
+- Several docs (`CLAUDE.md`, `PROJECT_STATE.md`, `TASKS.md`, `HANDOFF.md`) still claimed the 17-file doc set was uncommitted; corrected to reflect that the user committed it (`004a4ec`) between CHECKPOINT-2 and this session.
+
+**Verified, unchanged**: "10 sports built" (re-confirmed directly against `src/config/sports/*` and `src/fixtures/*`, not just doc prose), the live deploy (HTTP 200 from the production URL), `tsc -b`/tests (49/49)/`oxlint`, the SEC-1 react-router advisory (still open, unchanged), no secrets found anywhere in tracked files.
+
+**No application behavior changed.** Only `.md` documentation files were edited.
+
+---
+
+## [2026-08-06] Documentation/handoff audit — commit `004a4ec`
+
+A full repository audit was performed and a permanent documentation/memory system was created for this project, per an explicit user request to prepare for a clean account handoff. Committed by the user as `004a4ec` ("docs: add full handoff documentation system").
 
 **Added**:
 - `CLAUDE.md`, `PROJECT_STATE.md`, `ARCHITECTURE.md`, `FILE_MAP.md`, `FEATURES.md`, `TASKS.md`, `ROADMAP.md`, `DECISIONS.md`, `DATABASE.md`, `API_REFERENCE.md`, `UI_SYSTEM.md`, `SECURITY.md`, `TESTING.md`, `DEPLOYMENT.md`, `CHANGELOG.md` (this file), `SESSION_LOG.md`, `HANDOFF.md` — 17 new files at the repository root.
 
-**Significant problems discovered during the audit** (none required a code fix as part of this task — see `TASKS.md` for tracked follow-ups):
-- `README.md` is stale — states "Three sports ship today," actually 10.
+**Significant problems discovered during the audit** (none required a code fix as part of this task — see `TASKS.md` for tracked follow-ups; the README item was later fixed in CHECKPOINT-3 above):
+- `README.md` is stale — states "Three sports ship today," actually 10. **Fixed in CHECKPOINT-3 (2026-08-07), see above.**
 - No `localStorage` schema migration path exists.
 - No UI error boundary exists.
 - No automated test coverage exists for any React component/page, or for `src/utils/seasonWindow.ts` / `src/utils/liveScores.ts`.

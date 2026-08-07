@@ -5,13 +5,20 @@ salary-cap field) against 7 AI managers with distinct personas, play out a
 season — lineups, waivers, trades, playoffs — solo. Built so live
 multiplayer is a swap later, not a rewrite (see [Adding multiplayer](#adding-multiplayer)).
 
-Three sports ship today, one per scoring engine:
+Ten sports ship today, across three scoring engines:
 
 | Sport | Engine | Format |
 |---|---|---|
 | NFL | Head-to-head weekly | Snake draft, weekly matchups, W-L-T standings, 4-team playoff bracket |
+| College Football (CFB) | Head-to-head weekly | Snake draft, weekly matchups, W-L-T standings, 4-team playoff bracket |
+| Soccer (EPL) | Head-to-head weekly | Snake draft, weekly matchups, W-L-T standings, 4-team playoff bracket |
 | MLB | Daily rolling points | Snake draft, daily lineups, cumulative points leaderboard |
+| WNBA | Daily rolling points | Snake draft, daily lineups, cumulative points leaderboard |
+| NBA | Daily rolling points | Snake draft, daily lineups, cumulative points leaderboard |
+| MLS | Daily rolling points | Snake draft, daily lineups, cumulative points leaderboard |
 | PGA Tour | Salary-cap field | No draft — pick a fresh field each event under a budget |
+| Tennis | Salary-cap field | No draft — pick a fresh field each event under a budget |
+| NASCAR Cup | Salary-cap field | No draft — pick a fresh field each event under a budget |
 
 ## Running it
 
@@ -131,7 +138,7 @@ stay short:
    back. The `set({ state })` React-facing half of the store doesn't
    change — only where `next` comes from.
 
-Everything else — types, engine logic, all five sport configs, every
+Everything else — types, engine logic, all ten sport configs, every
 page and component — is unaware of single- vs. multiplayer and needs no
 changes. Out of scope for both v1 and this list: auth, accounts, and the
 websocket transport itself.
