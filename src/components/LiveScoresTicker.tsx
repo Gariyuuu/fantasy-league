@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { ThinkingOrb } from 'thinking-orbs'
 import type { SportId } from '../types'
 import { fetchLiveScores, type LiveScoresResult } from '../utils/liveScores'
 
@@ -19,11 +20,13 @@ interface Props {
 export function LiveScoresTicker({ sport }: Props) {
   const [result, setResult] = useState<LiveScoresResult | null>(null)
   const [failed, setFailed] = useState(false)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     let cancelled = false
     setResult(null)
     setFailed(false)
+    setLoading(true)
 
     async function load() {
       try {
@@ -31,6 +34,8 @@ export function LiveScoresTicker({ sport }: Props) {
         if (!cancelled) setResult(data)
       } catch {
         if (!cancelled) setFailed(true)
+      } finally {
+        if (!cancelled) setLoading(false)
       }
     }
 
@@ -42,6 +47,16 @@ export function LiveScoresTicker({ sport }: Props) {
     }
   }, [sport])
 
+  // Only the initial per-sport fetch shows a loading state -- background
+  // 60s refreshes stay silent so the ticker doesn't flicker every minute.
+  if (loading) {
+    return (
+      <div className="app-card flex items-center gap-2 px-4 py-3 text-xs text-zinc-500">
+        <ThinkingOrb state="searching" size={20} aria-label={`Checking today's real ${sport.toUpperCase()} scores`} />
+        <span>Checking today's real {sport.toUpperCase()} scores…</span>
+      </div>
+    )
+  }
   if (failed) return null
   if (!result || result.events.length === 0) return null
 

@@ -90,6 +90,45 @@ body {
   animation: pick-flash-in 1.1s ease-out;
 }
 
+/* CSS Text Effect (text-effects.colorion.co, MIT) — Gold-Foil, applied to the playoff
+   champion banner only. Font/letter-spacing dropped from the catalogue original so it
+   inherits the surrounding heading instead of forcing JetBrains Mono. Ends its cycle at
+   a fully-opaque gradient position (not transparent), so the reduced-motion guard above
+   degrades it to a static, still-legible frame. */
+.fx-foil {
+  color: transparent;
+  background:
+    linear-gradient(
+      108deg,
+      #7a4a08 0%,
+      #f2c15d 18%,
+      #fff4b8 24%,
+      #b87014 36%,
+      #f6d66d 51%,
+      #8e560b 68%,
+      #fff0a2 76%,
+      #c98218 100%
+    )
+    0 0 / 230% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  text-shadow:
+    0 1px 0 rgba(255, 244, 184, 0.45),
+    0 9px 20px rgba(0, 0, 0, 0.36);
+  animation: fx-foil 3.1s ease-in-out infinite;
+}
+@keyframes fx-foil {
+  0%,
+  100% {
+    background-position: 115% 0;
+    filter: saturate(1.05);
+  }
+  45% {
+    background-position: -35% 0;
+    filter: saturate(1.35) brightness(1.12);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

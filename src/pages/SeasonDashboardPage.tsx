@@ -8,6 +8,8 @@ import { PlayoffBracketView } from '../components/season/PlayoffBracketView'
 import { draftRounds } from '../engine/draft'
 import { LeagueBackdrop } from '../components/LeagueBackdrop'
 import { LiveScoresTicker } from '../components/LiveScoresTicker'
+import { LoadingLeague } from '../components/LoadingLeague'
+import { ThinkingOrb } from 'thinking-orbs'
 
 export function SeasonDashboardPage() {
   const { leagueId } = useParams<{ leagueId: string }>()
@@ -23,7 +25,7 @@ export function SeasonDashboardPage() {
   }, [leagueId, state?.id, loadLeague])
 
   if (!state || state.id !== leagueId) {
-    return <div className="flex min-h-svh items-center justify-center text-zinc-500">Loading league…</div>
+    return <LoadingLeague />
   }
 
   const humanTeam = state.teams.find((t) => t.isHuman)
@@ -70,7 +72,13 @@ export function SeasonDashboardPage() {
               </Link>
             )}
             {!isComplete && (
-              <button type="button" disabled={isAdvancingWeek} onClick={() => void advanceWeek()} className="btn-primary text-sm">
+              <button
+                type="button"
+                disabled={isAdvancingWeek}
+                onClick={() => void advanceWeek()}
+                className="btn-primary flex items-center gap-2 text-sm"
+              >
+                {isAdvancingWeek && <ThinkingOrb state="solving" size={20} aria-label="Simulating" />}
                 {isAdvancingWeek ? 'Simulating…' : isPlayoffs ? 'Play Round' : `Advance ${state.config.season.periodLabel} ${state.currentPeriod}`}
               </button>
             )}

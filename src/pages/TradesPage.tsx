@@ -6,6 +6,7 @@ import { positionColor } from '../components/draft/positionColors'
 import { projectedPoints } from '../engine/valuation'
 import type { TradeResponse } from '../types'
 import { LeagueBackdrop } from '../components/LeagueBackdrop'
+import { LoadingLeague } from '../components/LoadingLeague'
 
 export function TradesPage() {
   const { leagueId } = useParams<{ leagueId: string }>()
@@ -35,7 +36,7 @@ export function TradesPage() {
   const receiveValue = useMemo(() => [...receive].reduce((s, id) => s + value(id), 0), [receive, state])
 
   if (!state || state.id !== leagueId || !humanTeam) {
-    return <div className="flex min-h-svh items-center justify-center text-zinc-500">Loading league…</div>
+    return <LoadingLeague />
   }
 
   function toggle(set: Set<string>, setSet: (s: Set<string>) => void, id: string) {

@@ -6,6 +6,7 @@ import { projectedPoints } from '../engine/valuation'
 import { LeagueBackdrop } from '../components/LeagueBackdrop'
 import { FIELD_NOUN, SPORT_ICONS } from '../components/sportMeta'
 import { LiveScoresTicker } from '../components/LiveScoresTicker'
+import { LoadingLeague } from '../components/LoadingLeague'
 
 export function EventLobbyPage() {
   const { leagueId } = useParams<{ leagueId: string }>()
@@ -41,7 +42,7 @@ export function EventLobbyPage() {
   }, [state, weights])
 
   if (!state || state.id !== leagueId || !humanTeam) {
-    return <div className="flex min-h-svh items-center justify-center text-zinc-500">Loading league…</div>
+    return <LoadingLeague />
   }
 
   const spent = [...selected].reduce((sum, id) => sum + (state.players[id]?.salary ?? 0), 0)

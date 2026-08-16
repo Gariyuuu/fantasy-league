@@ -5,6 +5,7 @@ import { LeagueNav } from '../components/LeagueNav'
 import { positionColor } from '../components/draft/positionColors'
 import { projectedPoints } from '../engine/valuation'
 import { LeagueBackdrop } from '../components/LeagueBackdrop'
+import { LoadingLeague } from '../components/LoadingLeague'
 
 export function WaiversPage() {
   const { leagueId } = useParams<{ leagueId: string }>()
@@ -40,7 +41,7 @@ export function WaiversPage() {
   }, [state, tab])
 
   if (!state || state.id !== leagueId || !humanTeam) {
-    return <div className="flex min-h-svh items-center justify-center text-zinc-500">Loading league…</div>
+    return <LoadingLeague />
   }
 
   const pendingClaim = state.waiverClaims.find(
