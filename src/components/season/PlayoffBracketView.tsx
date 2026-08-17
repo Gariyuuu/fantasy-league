@@ -17,7 +17,7 @@ export function PlayoffBracketView({ state }: Props) {
       {state.phase === 'complete' && state.championTeamId && (
         <div className="mb-4 overflow-hidden rounded-xl border border-amber-400/40 bg-gradient-to-r from-amber-500/15 via-amber-400/10 to-amber-500/15 px-4 py-4 text-center shadow-lg shadow-amber-500/10">
           <p className="text-xs font-bold uppercase tracking-widest text-amber-400">🏆 Champion</p>
-          <p className="mt-1 text-2xl font-black text-amber-200">
+          <p className="fx-foil mt-1 text-2xl font-black">
             {(() => {
               const champ = state.teams.find((t) => t.id === state.championTeamId)
               return champ?.isHuman ? `${champ.name} (you)` : champ?.name

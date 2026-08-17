@@ -6,6 +6,7 @@ import { positionColor } from '../components/draft/positionColors'
 import { assignmentsFromLineup, buildOptimalLineup, expandSlotInstances, lineupFromAssignments } from '../engine/lineup'
 import { projectedPoints } from '../engine/valuation'
 import { LeagueBackdrop } from '../components/LeagueBackdrop'
+import { LoadingLeague } from '../components/LoadingLeague'
 
 export function LineupPage() {
   const { leagueId } = useParams<{ leagueId: string }>()
@@ -42,7 +43,7 @@ export function LineupPage() {
   }, [defaultLineup, instances])
 
   if (!state || state.id !== leagueId || !humanTeam) {
-    return <div className="flex min-h-svh items-center justify-center text-zinc-500">Loading league…</div>
+    return <LoadingLeague />
   }
 
   const isPlayoffs = state.phase === 'playoffs'

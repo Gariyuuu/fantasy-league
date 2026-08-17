@@ -2,6 +2,16 @@
 
 No CHANGELOG.md existed before this documentation audit. The entries below for prior work are reconstructed from `git log` (commit hashes/dates/messages) — not from any pre-existing changelog — and are dated by commit date, not by any separately-recorded release date (none exist).
 
+## [Unreleased] — Motion & interaction polish (branch `chore/polish`) — 2026-08-15
+
+**Added** (on `chore/polish`, off a clean `main`; uncommitted per this task's own instructions — never commit to main, never push/merge without explicit instruction):
+- `thinking-orbs` loading indicator, always rendered *alongside* (never replacing) the existing text, on: the shared "Loading league…" gate used by all 6 league-scoped pages (extracted into a new `src/components/LoadingLeague.tsx`, since all 6 were byte-identical duplicates), the Advance Week button's "Simulating…" state (`solving`), and `LiveScoresTicker`'s previously-silent initial fetch (`searching`) — the ticker's own by-design "fail silently" behavior on error/no-data is unchanged; only the brief initial-load window now shows something instead of nothing.
+- A "Gold-Foil" CSS text effect (`text-effects.colorion.co`, MIT) on the playoff champion banner only — one placement, deliberately restrained given this is a stats-heavy app (see `.fx-foil` in `src/index.css`).
+
+**Verified**: `npx tsc -b` and `npm run lint` (`oxlint`) both clean — the 7 pre-existing `react-hooks/exhaustive-deps` warnings are unchanged (confirmed by diffing lint output against unmodified `main`). `npm run build` succeeds. Browser-verified with Playwright/Chromium, `prefers-reduced-motion: reduce` emulated: the existing blanket guard in `src/index.css` (unchanged) still suppresses everything; a live check of the loading state confirmed the orb (canvas, 20×20, `opacity: 1`) and the "Loading league…" text render together, not orb-only; no invisible-overlay regression on the homepage. The master-plan claim that the draft clock (`.animate-clock-glow`) had "zero reduced-motion handling" was re-checked and found **false** — it was already covered by the existing blanket rule — so no fix was needed there.
+
+**No engine/reducer/type code touched.** Changes are confined to `src/pages/*`, `src/components/LiveScoresTicker.tsx`, the new `src/components/LoadingLeague.tsx`, `src/components/season/PlayoffBracketView.tsx`, `src/index.css`, and `package.json`/`package-lock.json` (added `thinking-orbs`, MIT).
+
 ## [Unreleased] — CHECKPOINT-3 final transfer checkpoint — 2026-08-07
 
 A further, independent verification pass (zero access to either prior checkpoint's conversation), requested as a "final transfer checkpoint" before handing the repo to a different Claude Code account.

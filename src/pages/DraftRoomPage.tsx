@@ -9,6 +9,7 @@ import { PositionNeed } from '../components/draft/PositionNeed'
 import { draftRounds } from '../engine/draft'
 import { SPORT_ICONS } from '../components/sportMeta'
 import { LeagueBackdrop } from '../components/LeagueBackdrop'
+import { LoadingLeague } from '../components/LoadingLeague'
 
 export function DraftRoomPage() {
   const { leagueId } = useParams<{ leagueId: string }>()
@@ -27,9 +28,7 @@ export function DraftRoomPage() {
   }, [leagueId, state?.id, loadLeague])
 
   if (!state || state.id !== leagueId) {
-    return (
-      <div className="flex min-h-svh items-center justify-center text-zinc-500">Loading league…</div>
-    )
+    return <LoadingLeague />
   }
 
   const humanTeam = state.teams.find((t) => t.isHuman)
