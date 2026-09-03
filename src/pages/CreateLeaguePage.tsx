@@ -47,7 +47,7 @@ export function CreateLeaguePage() {
   }
 
   const inputClass =
-    'w-full rounded-xl border border-zinc-800 bg-zinc-900/70 px-3.5 py-2.5 text-zinc-100 placeholder:text-zinc-600 transition-colors focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20'
+    'w-full rounded-xl border border-input bg-zinc-900/70 px-3.5 py-2.5 text-zinc-100 placeholder:text-zinc-600 transition-colors focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20'
 
   return (
     <div className="min-h-svh p-8">

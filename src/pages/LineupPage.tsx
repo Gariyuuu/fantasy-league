@@ -122,7 +122,7 @@ export function LineupPage() {
         <select
           value={assignedId ?? ''}
           onChange={(e) => handleAssign(inst.key, e.target.value)}
-          className="flex-1 rounded-lg border border-zinc-800 bg-zinc-950/70 px-2.5 py-1.5 text-sm text-zinc-200 focus:border-emerald-500 focus:outline-none"
+          className="flex-1 rounded-lg border border-input bg-zinc-950/70 px-2.5 py-1.5 text-sm text-zinc-200 focus:border-emerald-500 focus:outline-none"
         >
           <option value="">— Empty —</option>
           {eligibleOptions.map((p) => (

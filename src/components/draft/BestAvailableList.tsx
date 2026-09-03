@@ -53,7 +53,7 @@ export function BestAvailableList({ state, humanTeam, isHumanTurn, onDraft }: Pr
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Search players…"
-          className="w-full rounded-lg border border-zinc-800 bg-zinc-950/70 px-2.5 py-1.5 text-xs text-zinc-200 placeholder:text-zinc-600 focus:border-emerald-500 focus:outline-none"
+          className="w-full rounded-lg border border-input bg-zinc-950/70 px-2.5 py-1.5 text-xs text-zinc-200 placeholder:text-zinc-600 focus:border-emerald-500 focus:outline-none"
         />
       </div>
       <div className="flex-1 overflow-y-auto">

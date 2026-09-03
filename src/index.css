@@ -1,7 +1,27 @@
 @import 'tailwindcss';
+@import './design-system/master.css';
 
 :root {
   color-scheme: dark;
+
+  /* ---- PORTFOLIO DESIGN SYSTEM · MASTER v1.2 ------------------------------
+   * fantasy-league is Vite + React, not Next -- MASTER is imported from this
+   * entry stylesheet immediately after Tailwind, so every repo declaration
+   * below it wins ties (the everworld cascade rule).
+   * This repo declares NO custom properties of its own: it is pure Tailwind
+   * utilities on a zinc scale over a fixed radial-gradient backdrop. These two
+   * are the first, and they exist only because utilities need something to
+   * point at.
+   * --ring is the emerald the app already uses for its primary actions:
+   * 6.98:1 across the backdrop and the zinc surfaces.
+   * C7 -- controls drew `border-zinc-800` (#27272a): 1.19:1. Opaque, cool
+   * neutral to sit with the zinc scale: 3.09:1 worst. */
+  --ring: #10b981;
+  --input: oklch(0.51 0.01 250);
+}
+
+@theme inline {
+  --color-input: var(--input);   /* so `border-input` resolves */
 }
 
 html {
@@ -137,5 +157,26 @@ body {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+/* ---- REDUCED MOTION · P02 exemption --------------------------------------
+ * MASTER's floor is this repo's first reduced-motion policy, and it would have
+ * frozen the DRAFT CLOCK. .animate-clock-glow / -urgent are applied by
+ * DraftClockBar.tsx gated on `isHumanTurn` and `isUrgent` -- they are the only
+ * signal that it is YOUR pick and that it is about to time out. Freezing them
+ * costs the user their turn, which is exactly the sports-betting-web scan-ring
+ * case: "reduced motion means less vestibular trigger, not less feedback."
+ * Exempted at their OWN authored durations, !important because MASTER's floor
+ * is important too, and declared after the import so this wins.
+ * fx-foil is NOT exempted -- decorative card sheen, correctly clamped. */
+@media (prefers-reduced-motion: reduce) {
+  .animate-clock-glow {
+    animation-duration: 2s !important;
+    animation-iteration-count: infinite !important;
+  }
+  .animate-clock-glow-urgent {
+    animation-duration: 0.8s !important;
+    animation-iteration-count: infinite !important;
   }
 }

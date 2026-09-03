@@ -86,7 +86,7 @@ export function WaiversPage() {
                 <select
                   value={dropId}
                   onChange={(e) => setDropId(e.target.value)}
-                  className="w-full rounded-lg border border-zinc-800 bg-zinc-950/70 px-2.5 py-1.5 text-sm text-zinc-200"
+                  className="w-full rounded-lg border border-input bg-zinc-950/70 px-2.5 py-1.5 text-sm text-zinc-200"
                 >
                   <option value="">— Keep full roster —</option>
                   {humanTeam.roster.map((id) => (
@@ -104,7 +104,7 @@ export function WaiversPage() {
                   max={humanTeam.faabBudget ?? 0}
                   value={bid}
                   onChange={(e) => setBid(Number(e.target.value))}
-                  className="w-24 rounded-lg border border-zinc-800 bg-zinc-950/70 px-2.5 py-1.5 text-sm text-zinc-200"
+                  className="w-24 rounded-lg border border-input bg-zinc-950/70 px-2.5 py-1.5 text-sm text-zinc-200"
                 />
               </div>
               <button type="button" onClick={() => void handleSubmit()} className="btn-primary px-4 py-1.5 text-sm">
