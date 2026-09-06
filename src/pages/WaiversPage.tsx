@@ -140,7 +140,7 @@ export function WaiversPage() {
               {freeAgents.map(({ player, value }) => (
                 <tr key={player.id} className="border-b border-zinc-800/60 transition-colors hover:bg-zinc-800/40">
                   <td className="px-3 py-2">
-                    <span className={`rounded-md border px-1.5 py-0.5 text-[10px] font-bold ${positionColor(player.positions[0])}`}>
+                    <span className={`rounded-md border px-1.5 py-0.5 text-xs font-bold ${positionColor(player.positions[0])}`}>
                       {player.positions[0]}
                     </span>
                   </td>
@@ -154,7 +154,7 @@ export function WaiversPage() {
                         setSelectedAddId(player.id)
                         setSubmitted(false)
                       }}
-                      className="rounded-lg bg-zinc-800 px-2.5 py-1 text-[11px] font-bold text-zinc-200 transition-colors hover:bg-zinc-700"
+                      className="rounded-lg bg-zinc-800 px-2.5 py-1 text-xs font-bold text-zinc-200 transition-colors hover:bg-zinc-700"
                     >
                       Claim
                     </button>

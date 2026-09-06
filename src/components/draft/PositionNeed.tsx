@@ -31,7 +31,7 @@ export function PositionNeed({ state, team }: Props) {
           return (
             <span
               key={pos}
-              className={`rounded-lg border px-2.5 py-1.5 text-[11px] font-bold ${
+              className={`rounded-lg border px-2.5 py-1.5 text-xs font-bold ${
                 filled ? 'border-zinc-700 bg-zinc-800/60 text-zinc-400' : `${positionColor(pos)} shadow-sm`
               }`}
             >

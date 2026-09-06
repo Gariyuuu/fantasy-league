@@ -28,12 +28,32 @@ export function MatchupResults({ state, period }: Props) {
               <span className={`flex-1 truncate ${homeWon ? 'font-bold text-zinc-100' : 'text-zinc-400'}`}>
                 {home?.isHuman ? `${home.name} (you)` : home?.name}
               </span>
-              <span className={`stat-number w-14 text-right ${homeWon ? 'text-emerald-400' : 'text-zinc-500'}`}>
-                {m.homeScore.toFixed(1)}
+              {/* The winning score was emerald and the losing one zinc, which is
+                  a hue difference doing the whole job. The ▲ marker from the
+                  numerics layer says the same thing without colour, and the
+                  screen-reader text says it in words. */}
+              <span
+                className={`delta stat-number w-16 justify-end text-right ${homeWon ? 'text-emerald-400' : 'text-zinc-500'}`}
+                data-dir={homeWon ? 'up' : awayWon ? 'flat' : 'flat'}
+                data-cue={homeWon ? undefined : 'none'}
+              >
+                <span aria-hidden="true">{m.homeScore.toFixed(1)}</span>
+                <span className="sr-only">
+                  {home?.name} scored {m.homeScore.toFixed(1)}
+                  {homeWon ? ', winner' : ''}
+                </span>
               </span>
-              <span className="mx-2 text-zinc-700">–</span>
-              <span className={`stat-number w-14 ${awayWon ? 'text-emerald-400' : 'text-zinc-500'}`}>
-                {m.awayScore.toFixed(1)}
+              <span className="mx-2 text-zinc-700" aria-hidden="true">–</span>
+              <span
+                className={`delta stat-number w-16 ${awayWon ? 'text-emerald-400' : 'text-zinc-500'}`}
+                data-dir={awayWon ? 'up' : 'flat'}
+                data-cue={awayWon ? undefined : 'none'}
+              >
+                <span aria-hidden="true">{m.awayScore.toFixed(1)}</span>
+                <span className="sr-only">
+                  {away?.name} scored {m.awayScore.toFixed(1)}
+                  {awayWon ? ', winner' : ''}
+                </span>
               </span>
               <span className={`flex-1 truncate text-right ${awayWon ? 'font-bold text-zinc-100' : 'text-zinc-400'}`}>
                 {away?.isHuman ? `${away.name} (you)` : away?.name}

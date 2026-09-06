@@ -116,7 +116,7 @@ export function LineupPage() {
 
     return (
       <div key={inst.key} className="flex items-center gap-3 border-b border-zinc-800/50 px-3.5 py-2.5">
-        <span className={`w-14 shrink-0 rounded-md border px-1.5 py-0.5 text-center text-[10px] font-bold ${positionColor(inst.slot)}`}>
+        <span className={`w-14 shrink-0 rounded-md border px-1.5 py-0.5 text-center text-xs font-bold ${positionColor(inst.slot)}`}>
           {inst.slot}
         </span>
         <select
@@ -132,7 +132,7 @@ export function LineupPage() {
           ))}
         </select>
         {assignedPlayer?.status && assignedPlayer.status !== 'active' && (
-          <span className="shrink-0 rounded-full bg-amber-500/20 px-1.5 py-0.5 text-[10px] font-bold uppercase text-amber-300">
+          <span className="shrink-0 rounded-full bg-amber-500/20 px-1.5 py-0.5 text-xs font-bold uppercase text-amber-300">
             {assignedPlayer.status}
           </span>
         )}

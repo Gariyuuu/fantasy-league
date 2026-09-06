@@ -92,7 +92,7 @@ export function TradesPage() {
             className="flex cursor-pointer items-center gap-2 border-b border-zinc-800/50 px-3 py-2 text-sm hover:bg-zinc-800/40"
           >
             <input type="checkbox" checked={selected.has(id)} onChange={() => onToggle(id)} className="accent-emerald-500" />
-            <span className={`rounded border px-1.5 py-0.5 text-[10px] font-semibold ${positionColor(player.positions[0])}`}>
+            <span className={`rounded border px-1.5 py-0.5 text-xs font-semibold ${positionColor(player.positions[0])}`}>
               {player.positions[0]}
             </span>
             <span className="flex-1 text-zinc-200">{player.name}</span>

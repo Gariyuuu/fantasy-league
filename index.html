@@ -1,5 +1,9 @@
 <!doctype html>
-<html lang="en">
+<!-- data-scheme="dark" is how the numerics family layer is told which colour
+     ramp to use. This app has no light mode and no theme class (it sets
+     color-scheme: dark in CSS), so without this hook the layer would serve its
+     light delta colours onto a near-black backdrop. -->
+<html lang="en" data-scheme="dark">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />

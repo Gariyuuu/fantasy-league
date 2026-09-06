@@ -35,7 +35,7 @@ export function PickFeed({ state }: Props) {
             >
               <span className="w-8 shrink-0 font-mono text-zinc-600">{pick.overall + 1}.</span>
               <span
-                className={`shrink-0 rounded-md border px-1 py-0.5 text-[10px] font-bold ${positionColor(player?.positions[0] ?? '')}`}
+                className={`shrink-0 rounded-md border px-1 py-0.5 text-xs font-bold ${positionColor(player?.positions[0] ?? '')}`}
               >
                 {player?.positions[0]}
               </span>
@@ -44,7 +44,7 @@ export function PickFeed({ state }: Props) {
                 {persona?.avatar ?? '🧑'} {team?.isHuman ? `${team.name} (you)` : team?.name}
               </span>
               {pick.autopick && (
-                <span className="shrink-0 rounded-full bg-amber-500/20 px-1.5 text-[9px] font-bold text-amber-300">AUTO</span>
+                <span className="shrink-0 rounded-full bg-amber-500/20 px-1.5 text-xs font-bold text-amber-300">AUTO</span>
               )}
             </div>
           )

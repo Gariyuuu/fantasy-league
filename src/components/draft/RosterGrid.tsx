@@ -51,7 +51,7 @@ export function RosterGrid({ state, currentPickerTeamId }: Props) {
                     {player ? (
                       <div className="flex items-center gap-1">
                         <span
-                          className={`rounded border px-1 py-0.5 text-[9px] font-semibold ${positionColor(player.positions[0])}`}
+                          className={`rounded border px-1 py-0.5 text-xs font-semibold ${positionColor(player.positions[0])}`}
                         >
                           {player.positions[0]}
                         </span>

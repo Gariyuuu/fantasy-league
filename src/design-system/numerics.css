@@ -1,0 +1,430 @@
+/* VENDORED from ~/Projects/.design-system/families/numerics.css v1.0 — do not edit here.
+ * Source of truth is the portfolio family layer. Re-vendor, never patch in place. */
+/* ============================================================================
+ * NUMERICS — family layer for W9 (Finance, Markets, Trackers & Briefings) v1.0
+ *
+ * SOURCE OF TRUTH: ~/Projects/.design-system/families/numerics.css
+ * Vendor a copy per repo; record the version. Never patch a vendored copy.
+ *
+ * HIERARCHY:  MASTER.css -> families/numerics.css -> overrides/<project>.css
+ *             -> project globals.css
+ *
+ * WHY A FAMILY LAYER AND NOT MASTER: these tokens are only correct for
+ * numbers-first surfaces (terminals, scanners, trackers, digests). A green
+ * "up" colour is meaningless in a 3D world or a narrative game, and MASTER
+ * exists to hold what every repo needs. Twelve repos need this; 115 do not.
+ *
+ * WHAT IT SETTLES, once, for all twelve:
+ *   1. tabular numerics          — a column of numbers must not reflow per digit
+ *   2. numeric column alignment  — right-aligned, decimal-stable
+ *   3. delta / PnL semantics     — green up, red down, PLUS a shape cue
+ *   4. sparkline stroke          — one stroke spec, direction-coloured
+ *   5. feed card                 — one card skeleton across three verticals
+ *   6. freshness                 — live / stale / offline / loading, always
+ *                                  paired with a real timestamp
+ *
+ * ---------------------------------------------------------------------------
+ * THE COLOUR CUE IS NEVER ALONE (this is the load-bearing rule)
+ *
+ * Red/green is the single most common CVD collision (deuteranopia ~6% of men).
+ * Every delta in this layer therefore carries a SHAPE: ▲ up, ▼ down, – flat,
+ * emitted by ::before so it cannot be forgotten at a call site. It uses the
+ * CSS alt-text form  content: "▲" / ""  so assistive tech does not announce a
+ * decorative glyph — the accessible name comes from the number and its label.
+ *
+ * DO NOT set the glyph to display:none to "clean up" a design. If a surface
+ * genuinely cannot carry it, use .delta[data-dir][data-cue="sign"], which
+ * substitutes an explicit +/- sign — still redundant, still non-colour.
+ *
+ * ---------------------------------------------------------------------------
+ * DARK MODE IS OPT-IN BY SELECTOR, NOT BY prefers-color-scheme
+ *
+ * A light-only app on a dark-OS machine would otherwise inherit the dark
+ * ramp on a white background and fail contrast everywhere. So dark values
+ * attach only to explicit hooks: .dark, [data-theme="dark"],
+ * [data-scheme="dark"]. Dark-only apps set one of those on <html>.
+ * Repos that genuinely want OS-following opt in with [data-numerics-auto].
+ *
+ * ---------------------------------------------------------------------------
+ * MEASURED CONTRAST (tools/contrast.py, WCAG 2.1, worst case across the
+ * MASTER surface stack: background / card / muted / secondary|accent)
+ *
+ *   light  up 4.67:1   down 5.13:1   flat 5.03:1   warn 4.54:1
+ *   dark   up 8.04:1   down 5.28:1   flat 5.69:1   warn 7.45:1
+ *
+ * All clear 4.5:1 as text, so a delta may be rendered at body size. Ink on
+ * its own chip fill: light 4.94/5.21/5.26, dark 8.16/5.56/5.88.
+ * Re-run after any re-tint:  python3 tools/contrast.py <ink> <surface>
+ * ========================================================================= */
+
+@layer tokens {
+  :root {
+    /* ---- DELTA / PnL INK ------------------------------------------------
+     * Semantic, not literal: --num-up is "the favourable direction". A
+     * latency chart or a burn-rate tracker inverts which way that points;
+     * flip it at the call site with data-dir, never by editing the token. */
+    --num-up:      oklch(0.50 0.14 152);
+    --num-down:    oklch(0.52 0.20 25);
+    --num-flat:    oklch(0.50 0.01 264);
+    --num-warn:    oklch(0.53 0.13 70);
+
+    /* Chip fills. Ink-on-own-fill verified above; these are NOT
+     * interchangeable with the ink tokens. */
+    --num-up-surface:   oklch(0.955 0.035 152);
+    --num-down-surface: oklch(0.955 0.035 25);
+    --num-flat-surface: oklch(0.955 0.006 264);
+    --num-warn-surface: oklch(0.955 0.035 75);
+
+    /* ---- NUMERIC TYPE --------------------------------------------------
+     * Digit width is the whole point. A proportional 1 is ~40% narrower
+     * than a 0 in Geist, so an unlabelled column jitters on every refresh
+     * and the eye loses the decimal point. */
+    --num-feature: tabular-nums;
+    --num-tracking: 0;          /* tabular figures are already even */
+
+    /* ---- SPARKLINE -----------------------------------------------------
+     * 1.5px reads as a hairline at sparkline scale without becoming a
+     * chart. Area fill stays low so the stroke, not the wash, carries it. */
+    --spark-width: 1.5px;
+    --spark-area-opacity: 0.12;
+    --spark-baseline: color-mix(in oklab, currentColor 18%, transparent);
+    --spark-dot: 2.5px;
+
+    /* ---- FRESHNESS -----------------------------------------------------
+     * Four states, because "no data" and "old data" are different failures
+     * and a scanner that conflates them is lying to its user. */
+    --fresh-live:    var(--num-up);
+    --fresh-stale:   var(--num-warn);
+    --fresh-offline: var(--num-down);
+    --fresh-idle:    var(--num-flat);
+    --fresh-dot: 6px;
+  }
+
+  .dark,
+  [data-theme="dark"],
+  [data-scheme="dark"] {
+    --num-up:      oklch(0.80 0.16 152);
+    --num-down:    oklch(0.72 0.17 22);
+    --num-flat:    oklch(0.72 0.012 264);
+    --num-warn:    oklch(0.80 0.15 80);
+
+    --num-up-surface:   oklch(0.28 0.045 152);
+    --num-down-surface: oklch(0.28 0.05 22);
+    --num-flat-surface: oklch(0.28 0.012 264);
+    --num-warn-surface: oklch(0.28 0.045 80);
+  }
+
+  /* Opt-in OS following, for repos that have no theme class at all. */
+  @media (prefers-color-scheme: dark) {
+    :root[data-numerics-auto] {
+      --num-up:      oklch(0.80 0.16 152);
+      --num-down:    oklch(0.72 0.17 22);
+      --num-flat:    oklch(0.72 0.012 264);
+      --num-warn:    oklch(0.80 0.15 80);
+      --num-up-surface:   oklch(0.28 0.045 152);
+      --num-down-surface: oklch(0.28 0.05 22);
+      --num-flat-surface: oklch(0.28 0.012 264);
+      --num-warn-surface: oklch(0.28 0.045 80);
+    }
+  }
+}
+
+@layer components {
+  /* ==========================================================================
+   * 1 · TABULAR NUMERICS
+   * ======================================================================= */
+  .num,
+  [data-num],
+  .num-col,
+  th.num-col,
+  td.num-col {
+    font-variant-numeric: var(--num-feature);
+    letter-spacing: var(--num-tracking);
+  }
+
+  /* Right-aligned numeric column. Applied to BOTH the header cell and the
+   * body cell — a right-aligned column under a left-aligned header is the
+   * most common table defect in this family. */
+  .num-col { text-align: right; }
+  .num-col > * { justify-content: flex-end; }
+
+  /* A monospaced identifier column (ticker, order id, hash): same rhythm as
+   * the numbers beside it, plus a slashed zero so 0/O never collide. */
+  .num-mono {
+    font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
+    font-variant-numeric: tabular-nums slashed-zero;
+    font-feature-settings: "zero" 1;
+  }
+
+  /* A big headline figure. Slightly tighter than display type because
+   * tabular digits already carry their own even sidebearings. */
+  .num-display {
+    font-variant-numeric: var(--num-feature);
+    letter-spacing: -0.02em;
+    font-weight: 600;
+    line-height: 1.1;
+  }
+
+  /* ==========================================================================
+   * 2 · DELTA / PnL
+   *
+   *   <span class="delta" data-dir="up">+2.41%</span>
+   *   <span class="delta delta-chip" data-dir="down">-118.20</span>
+   *   <span class="delta" data-dir="flat" data-cue="sign">0.00</span>
+   *
+   * data-dir is REQUIRED. Without it the element is inert neutral text —
+   * that is deliberate, so a missing direction shows up as a missing colour
+   * rather than as a silently wrong one.
+   * ======================================================================= */
+  .delta {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.25em;
+    font-variant-numeric: var(--num-feature);
+    color: var(--num-flat);
+  }
+
+  .delta::before {
+    /* Declared twice on purpose. The second is the alt-text form -- the glyph
+     * is decorative, the number is the content -- but it is only understood by
+     * Chrome 77+/Firefox 118+/Safari 17.4+. In an older engine the whole
+     * declaration is invalid and the glyph would vanish, taking the
+     * colour-blind-safe cue with it. The plain declaration above it survives
+     * there; the alt form wins everywhere it is supported. Losing the visual
+     * cue is worse than an older screen reader announcing a triangle. */
+    content: var(--delta-glyph, "");
+    content: var(--delta-glyph, "") / "";
+    font-size: 0.78em;
+    line-height: 1;
+    /* optical: the triangles sit high on the baseline in most faces */
+    transform: translateY(-0.04em);
+  }
+
+  .delta[data-dir="up"]   { color: var(--num-up);   --delta-glyph: "\25B2"; }
+  .delta[data-dir="down"] { color: var(--num-down); --delta-glyph: "\25BC"; }
+  .delta[data-dir="flat"] { color: var(--num-flat); --delta-glyph: "\2013"; }
+
+  /* Sign cue instead of a triangle, for dense tables where the glyph would
+   * cost a column of width. Still redundant with colour. */
+  .delta[data-cue="sign"][data-dir="up"]   { --delta-glyph: "+"; }
+  .delta[data-cue="sign"][data-dir="down"] { --delta-glyph: "\2212"; }
+  .delta[data-cue="sign"][data-dir="flat"] { --delta-glyph: "\00B7"; }
+
+  /* Colour-only, for the rare case where the number itself already carries a
+   * printed sign. Opt in explicitly so it is a decision, not an oversight. */
+  .delta[data-cue="none"]::before,
+  .delta:not([data-dir])::before {
+    /* `content: ""` would still lay out an empty box and the flex gap would
+     * open a phantom 0.25em before the number. Remove the box, not the text. */
+    content: none;
+  }
+
+  .delta-chip {
+    padding: 0.125rem 0.4rem;
+    border-radius: var(--radius-sm, 0.375rem);
+    background: var(--num-flat-surface);
+    font-size: var(--text-xs, 0.75rem);
+    font-weight: 500;
+    line-height: 1.4;
+  }
+  .delta-chip[data-dir="up"]   { background: var(--num-up-surface); }
+  .delta-chip[data-dir="down"] { background: var(--num-down-surface); }
+
+  /* Value-change flash. Information-bearing on a live tape, so it is short
+   * and it does not move layout — background only. */
+  @keyframes num-flash {
+    from { background-color: var(--num-flash-surface, transparent); }
+    to   { background-color: transparent; }
+  }
+  .num-flash {
+    animation: num-flash 620ms var(--ease, cubic-bezier(0.4, 0, 0.2, 1));
+  }
+  .num-flash[data-dir="up"]   { --num-flash-surface: var(--num-up-surface); }
+  .num-flash[data-dir="down"] { --num-flash-surface: var(--num-down-surface); }
+
+  /* ==========================================================================
+   * 3 · SPARKLINE
+   *
+   *   <svg class="spark" viewBox="0 0 100 28" data-dir="up" preserveAspectRatio="none">
+   *     <path class="spark-area" d="..." />
+   *     <path class="spark-line" d="..." />
+   *   </svg>
+   *
+   * preserveAspectRatio="none" + non-scaling-stroke is the pairing that keeps
+   * a stretched sparkline's stroke from going elliptical.
+   * ======================================================================= */
+  .spark { display: block; overflow: visible; color: var(--num-flat); }
+  .spark[data-dir="up"]   { color: var(--num-up); }
+  .spark[data-dir="down"] { color: var(--num-down); }
+
+  .spark-line {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: var(--spark-width);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    vector-effect: non-scaling-stroke;
+  }
+  .spark-area { fill: currentColor; opacity: var(--spark-area-opacity); stroke: none; }
+  .spark-baseline {
+    stroke: var(--spark-baseline);
+    stroke-width: 1px;
+    stroke-dasharray: 2 3;
+    vector-effect: non-scaling-stroke;
+  }
+  .spark-dot { fill: currentColor; r: var(--spark-dot); }
+
+  /* ==========================================================================
+   * 4 · FEED CARD — the one card skeleton shared by daily-brief,
+   *     market-brief and dramabrief, and by any digest/scanner list.
+   *
+   *   <article class="feed-card">
+   *     <div class="feed-card-meta"> source · <time>…</time> </div>
+   *     <h3 class="feed-card-title">…</h3>
+   *     <p class="feed-card-body">…</p>
+   *     <div class="feed-card-foot">…</div>
+   *   </article>
+   * ======================================================================= */
+  .feed-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1rem;
+    border: 1px solid var(--border, currentColor);
+    border-radius: var(--radius-lg, 0.625rem);
+    background: var(--card, transparent);
+    transition: border-color var(--duration, 150ms) var(--ease, ease),
+                background-color var(--duration, 150ms) var(--ease, ease),
+                transform var(--duration, 150ms) var(--ease, ease);
+  }
+  /* Hover lift is 1px. Anything larger reads as a button, and a feed of
+   * fifty cards that each jump 4px is a twitchy list. */
+  @media (hover: hover) {
+    .feed-card:hover { transform: translateY(-1px); }
+  }
+  .feed-card:focus-within { border-color: var(--ring, currentColor); }
+
+  .feed-card-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: var(--text-xs, 0.75rem);
+    color: var(--muted-foreground, currentColor);
+    font-variant-numeric: var(--num-feature);
+  }
+  .feed-card-title {
+    font-size: var(--text-base, 1rem);
+    font-weight: 600;
+    line-height: 1.35;
+    letter-spacing: -0.01em;
+    overflow-wrap: anywhere;
+    min-width: 0;
+  }
+  .feed-card-body {
+    font-size: var(--text-sm, 0.875rem);
+    line-height: 1.6;
+    color: var(--muted-foreground, currentColor);
+  }
+  .feed-card-foot {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    font-size: var(--text-xs, 0.75rem);
+  }
+  /* Whole-card link target without nesting an <a> around block content. */
+  .feed-card-link::after { content: ""; position: absolute; inset: 0; }
+
+  /* ==========================================================================
+   * 5 · FRESHNESS / REFRESH STATE
+   *
+   *   <span class="freshness" data-state="stale">
+   *     <span class="freshness-dot"></span>
+   *     Updated <time datetime="…">14 min ago</time>
+   *   </span>
+   *
+   * THE TIMESTAMP IS NOT OPTIONAL. A coloured dot alone tells a user that
+   * something is wrong but not how wrong. Every state here is designed to sit
+   * next to a real, machine-readable <time>.
+   * ======================================================================= */
+  .freshness {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: var(--text-xs, 0.75rem);
+    color: var(--muted-foreground, currentColor);
+    font-variant-numeric: var(--num-feature);
+  }
+  .freshness-dot {
+    flex: none;
+    width: var(--fresh-dot);
+    height: var(--fresh-dot);
+    border-radius: 50%;
+    background: var(--fresh-idle);
+  }
+  .freshness[data-state="live"]    .freshness-dot { background: var(--fresh-live); }
+  .freshness[data-state="stale"]   .freshness-dot { background: var(--fresh-stale); }
+  .freshness[data-state="offline"] .freshness-dot { background: var(--fresh-offline); }
+  .freshness[data-state="loading"] .freshness-dot { background: var(--fresh-idle); }
+
+  /* Shape backs up the colour here too: stale is ringed, offline is hollow. */
+  .freshness[data-state="stale"] .freshness-dot {
+    box-shadow: 0 0 0 2px color-mix(in oklab, var(--fresh-stale) 30%, transparent);
+  }
+  .freshness[data-state="offline"] .freshness-dot {
+    background: transparent;
+    border: 2px solid var(--fresh-offline);
+  }
+
+  @keyframes freshness-breathe {
+    0%, 100% { opacity: 1; }
+    50%      { opacity: 0.45; }
+  }
+  .freshness[data-state="live"] .freshness-dot,
+  .freshness[data-state="loading"] .freshness-dot {
+    animation: freshness-breathe 2.4s var(--ease, ease-in-out) infinite;
+  }
+  /* No reduced-motion exemption on purpose: the adjacent timestamp already
+   * carries the state, so this is decoration and MASTER's clamp may take it. */
+
+  /* A region whose data is known-stale. Dimming alone would be a colour-free
+   * but ALSO meaning-free cue, so it always pairs with a .freshness label. */
+  .is-stale { opacity: 0.72; }
+  .is-stale .delta { color: var(--num-flat); }
+
+  /* ==========================================================================
+   * 6 · NO-DATA / DEAD-FEED
+   *
+   * A scanner with a dead upstream key is not an error screen and not an
+   * empty list — it is a surface with a known shape and nothing in it.
+   * edge-terminal is the reference case.
+   * ======================================================================= */
+  .no-data {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 3rem 1.5rem;
+    text-align: center;
+    border: 1px dashed var(--border, currentColor);
+    border-radius: var(--radius-lg, 0.625rem);
+    color: var(--muted-foreground, currentColor);
+  }
+  .no-data-title {
+    font-size: var(--text-sm, 0.875rem);
+    font-weight: 600;
+    color: var(--foreground, currentColor);
+  }
+  .no-data-body { font-size: var(--text-sm, 0.875rem); max-width: 42ch; line-height: 1.6; }
+
+  /* Ghost rows: keep the table's shape visible while it has no rows, so the
+   * column widths do not snap when data arrives. */
+  .num-ghost {
+    color: transparent;
+    background: color-mix(in oklab, currentColor 8%, transparent);
+    border-radius: var(--radius-sm, 0.375rem);
+    user-select: none;
+  }
+}

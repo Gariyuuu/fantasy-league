@@ -125,3 +125,50 @@ Chronological log for AI coding sessions on this project. **Append new entries a
 - **Verification**: `npx tsc -b` clean; `npm run lint` (`oxlint`) — same 7 pre-existing `react-hooks/exhaustive-deps` warnings as unmodified `main` (diffed to confirm, not assumed); `npm run build` succeeds. Browser-verified per this repo's own established standard (not just `tsc`/build): Playwright + Chromium with `prefers-reduced-motion: reduce` emulated against the actual running dev server — confirmed the existing blanket guard still suppresses motion, confirmed live that the loading screen renders the orb (canvas, visible, `opacity: 1`) *and* the text together (never orb-only — a canvas-only loader would be silent/motionless for reduced-motion users, worse than the plain text that was there before), and confirmed no invisible-overlay regression. Also isolated-harness-verified (outside the app, real Chromium) that the new `.fx-foil` keyframe never resolves to a hidden/transparent end state under forced `animation-iteration-count: 1`.
 - **Not done this session**: no commit (per the cross-repo task's explicit rule); no live full-season playthrough to see the champion banner render in the actual app (verified via an isolated CSS harness instead, since reaching `phase: 'complete'` organically requires playing out an entire simulated season); `PROJECT_STATE.md`/`TASKS.md` were not updated (no product-facing status/task actually changed — this was a purely additive UI polish pass, not a milestone).
 
+---
+
+## Session: 2026-09-05 — W9 UI/UX overhaul (numbers-first design pass)
+
+**Who:** Claude Code session running the `/overhaul` skill against group **W9** of
+`~/Projects/OVERHAUL-GROUPS.md` (Finance, Markets, Trackers & Briefings — 12 repos).
+Polish pass only: no product architecture, backend logic, schema, auth or route
+changes.
+
+**The shared piece.** A new layer was added to the portfolio design system at
+`~/Projects/.design-system/families/numerics.css` (v1.0) — a *family* layer sitting
+between `MASTER.css` and per-project overrides, holding the decisions that are correct
+for numbers-first surfaces and meaningless elsewhere: tabular numerals, right-aligned
+numeric columns, delta/PnL semantics with a **non-colour** cue, one sparkline stroke
+spec, the shared feed card, freshness/refresh states, and a no-data surface distinct
+from an error. `MASTER.css` itself was NOT modified, so no repo outside W9 is affected
+and no vendored MASTER copy went stale. See `.design-system/CHANGELOG.md` and
+`.design-system/families/README.md`.
+
+**The rule that layer exists to enforce:** a signed number never states its direction
+in colour alone. `.delta[data-dir]` emits ▲/▼/– from `::before`, so a call site cannot
+forget it.
+
+**What was done here:**
+
+- Vendored `src/design-system/numerics.css`, imported after `master.css`.
+- `index.html`'s `<html>` gained `data-scheme="dark"`. This app has no light mode and
+  no theme class (it sets `color-scheme: dark` in CSS), so without that hook the
+  family layer would have served its **light** delta colours onto a near-black
+  gradient backdrop.
+- The family tokens are re-pointed at the emerald/rose this app already speaks in,
+  re-measured against the darkest backdrop stop and the zinc card: emerald `#34d399`
+  **10.48:1 / 9.22:1**, rose `#fb7185` **7.48:1 / 6.58:1**.
+- `MatchupResults`: the winning score was emerald and the losing one zinc — a hue
+  difference doing the whole job. Both now carry the family's ▲ marker plus a
+  screen-reader phrasing naming the winner.
+- `StandingsTable`: numeric columns are `.num-col` (tabular, so W/L stop jittering
+  between 9 and 10), and the single-letter headings W/L/T/PF/PA are now `<abbr>` with
+  expansions — unreadable to a screen reader on their own.
+- Hygiene: 9 × `text-[9px]`/`text-[10px]`/`text-[11px]` raised to the 12px floor.
+
+**Verification:** `npm run build` succeeds (Vite). Built CSS inspected to confirm the family layer lands in `@layer tokens` while this repo's own `:root` binding stays unlayered — so the repo palette wins, per the cascade-layers spec.
+
+**Not done / deliberately out of scope:** no commits, no push, no deploy. Product
+behaviour, routes, data model and auth are unchanged.
+
+---

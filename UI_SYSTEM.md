@@ -102,3 +102,86 @@ See "Breakpoints" above — not systematically implemented. `CreateLeaguePage`'s
 
 - `CreateLeaguePage`'s 10-sport picker grid has an orphaned single card in the last row (see `TASKS.md` UX-1) — cosmetic only.
 - Background photo quality/framing varies by sport (see `DECISIONS.md` AD-007) — all are real, licensed, and reasonably on-theme, but not uniformly "dramatic packed crowd" shots (e.g. the EPL background is pitch-level action with no visible stadium bowl, unlike most others).
+
+## The W9 numerics family layer (added 2026-09-05)
+
+**Source of truth:** `~/Projects/.design-system/families/numerics.css` (v1.0).
+**Vendored here as** ``src/design-system/numerics.css``, imported from ``src/index.css`` immediately after
+`master.css`. The copy is byte-identical to the source apart from a two-line header.
+**Do not patch the vendored copy** — fix the source and re-vendor, exactly as with
+`MASTER.css`.
+
+### What it is
+
+A *family* layer, sitting between `MASTER.css` and per-project overrides:
+
+```
+MASTER.css  ->  families/numerics.css  ->  overrides/<project>.css  ->  this repo's globals.css
+```
+
+MASTER holds what all 115 portfolio repos need. A family layer holds what one kind of
+surface needs and no one else does. "Green means up" is meaningless in a 3D world or a
+narrative game; tabular numerals are wrong for prose. Twelve numbers-first repos share
+this one (see `~/Projects/OVERHAUL-GROUPS.md` group W9).
+
+### What it provides
+
+| Class | Use |
+|---|---|
+| `.num` | tabular figures on any element |
+| `.num-col` | right-aligned tabular column — **apply to the `<th>` and the `<td>`** |
+| `.num-mono` | monospaced identifier column (ticker, order id) with a slashed zero |
+| `.num-display` | a headline figure |
+| `.delta[data-dir="up\|down\|flat"]` | a signed change (see the rule below) |
+| `.delta-chip` | the same, as a filled pill |
+| `.spark` / `.spark-line` / `.spark-area` / `.spark-dot` | one sparkline stroke spec |
+| `.feed-card` + `-meta` / `-title` / `-body` / `-foot` / `-link` | the shared feed entry |
+| `.freshness[data-state="live\|stale\|offline\|loading"]` + `.freshness-dot` | refresh state |
+| `.no-data` + `.no-data-title` / `.no-data-body` | a surface with a known shape and nothing in it |
+| `.is-stale`, `.num-flash`, `.num-ghost` | stale region, value-change flash, ghost row |
+
+### The rule this layer exists to enforce
+
+**A signed number never states its direction in colour alone.** Red/green is the most
+common colour-vision collision (deuteranopia, ~6% of men) and every surface in this
+family is one where a sign is the point. `.delta` emits ▲/▼/– from `::before`, so a
+call site *cannot* forget it. If a surface genuinely cannot carry the glyph, use
+`data-cue="sign"` (explicit +/−) — still redundant, still non-colour. `data-cue="none"`
+exists only for values that already print their own sign, and using it is a decision to
+be justified, not a default.
+
+`content` is deliberately declared **twice** on `.delta::before`. The second is the
+CSS alt-text form (`content: "▲" / ""`), which marks the glyph decorative so assistive
+tech reads the number rather than "black up-pointing triangle" — but it is only
+understood by Chrome 77+, Firefox 118+, Safari 17.4+. In an older engine that whole
+declaration is invalid and the glyph would vanish, taking the accessible cue with it.
+The plain declaration is the fallback. Do not "clean up" the duplicate.
+
+### Dark mode is opt-in by selector
+
+Dark values attach only to `.dark`, `[data-theme="dark"]` and `[data-scheme="dark"]` —
+never to `prefers-color-scheme`, because a light-only app on a dark-OS machine would
+otherwise inherit the dark ramp on a white background and fail contrast everywhere.
+**This app is dark-only and has no theme class** (it sets `color-scheme: dark`
+in CSS), so `index.html`'s `<html>` carries `data-scheme="dark"`. Without that hook the
+family layer would serve its *light* delta colours onto a near-black gradient backdrop.
+
+### Contrast
+
+Every family token clears **4.5:1 as text** on the MASTER surface stack in both ramps
+(light: up 4.67, down 5.13, flat 5.03, warn 4.54; dark: 8.04 / 5.28 / 5.69 / 7.45).
+Re-measure after any re-tint with `python3 ~/Projects/.design-system/tools/contrast.py <ink> <surface>`.
+
+### This repo re-points the family tokens at its own palette
+
+The app sits on a saturated near-black gradient and already speaks in emerald/rose, so
+`src/index.css` binds `--num-up`/`--num-down`/`--num-flat`/`--num-warn` to those hues.
+Measured against the darkest backdrop stop (`#05070d`) and the zinc-900 card:
+emerald `#34d399` **10.48:1 / 9.22:1**, rose `#fb7185` **7.48:1 / 6.58:1**.
+
+That binding is declared **unlayered**, while the family layer's dark ramp sits in
+`@layer tokens`. Per the cascade-layers spec unlayered normal declarations beat every
+layer, so the repo palette wins — verified by inspecting the built CSS, not assumed.
+
+`.stat-number` (this repo's pre-existing `font-mono font-black tabular-nums`) is kept
+and now sits alongside `.num-col` for table columns.

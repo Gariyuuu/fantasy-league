@@ -1,5 +1,15 @@
 # PROJECT_STATE.md
 
+> **Update 2026-09-05 — W9 UI/UX overhaul pass (uncommitted).**
+> This repo was polished as part of group **W9** of `~/Projects/OVERHAUL-GROUPS.md`
+> (numbers-first surfaces). Working tree is now **dirty and uncommitted**: 17
+> file(s) changed. Nothing was committed, pushed or deployed.
+> No product architecture, backend logic, schema, auth or route changes.
+> Full detail: this repo's `SESSION_LOG.md` (newest entry) and `UI_SYSTEM.md`.
+> Verification run this pass: `npm run build` succeeds (Vite); built CSS inspected to confirm the token cascade resolves as intended.
+> The group's shared tokens are a **new portfolio design-system layer**,
+> `~/Projects/.design-system/families/numerics.css` (v1.0). `MASTER.css` is unchanged.
+
 **This file describes the exact state at the moment of the most recent checkpoint below. Update it after every meaningful task — it should always let a new session resume from the exact stopping point without re-deriving context.**
 
 ## Checkpoint metadata (most recent — CHECKPOINT-3, a further-later, separate final-transfer verification session)

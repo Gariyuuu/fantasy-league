@@ -31,7 +31,7 @@ export function PlayoffBracketView({ state }: Props) {
           const played = roundIndex < rounds.length - 1 || state.phase === 'complete'
           return (
             <div key={round.round} className="flex min-w-[220px] flex-col justify-center gap-4">
-              <p className="text-center text-[11px] font-bold uppercase tracking-wide text-zinc-500">
+              <p className="text-center text-xs font-bold uppercase tracking-wide text-zinc-500">
                 {round.matchups.length === 1 ? '🏆 Championship' : `Round ${round.round}`}
               </p>
               {round.matchups.map((m, i) => {

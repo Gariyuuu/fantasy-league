@@ -81,7 +81,7 @@ export function LiveScoresTicker({ sport }: Props) {
                   <span className="font-semibold text-zinc-200">{ev.homeTeam}</span>
                   <span className="stat-number text-zinc-300">{ev.homeScore}</span>
                 </div>
-                <span className={`text-[10px] font-bold uppercase ${ev.isLive ? 'text-rose-400' : 'text-zinc-600'}`}>
+                <span className={`text-xs font-bold uppercase ${ev.isLive ? 'text-rose-400' : 'text-zinc-600'}`}>
                   {ev.statusDetail}
                 </span>
               </div>
@@ -92,7 +92,7 @@ export function LiveScoresTicker({ sport }: Props) {
                 className="flex min-w-[220px] shrink-0 flex-col gap-1 rounded-lg border border-zinc-800 bg-zinc-950/60 px-3 py-2"
               >
                 <span className="text-sm font-semibold text-zinc-200">{ev.name}</span>
-                <span className={`text-[10px] font-bold uppercase ${ev.isLive ? 'text-rose-400' : 'text-zinc-600'}`}>
+                <span className={`text-xs font-bold uppercase ${ev.isLive ? 'text-rose-400' : 'text-zinc-600'}`}>
                   {ev.statusDetail}
                 </span>
                 {ev.topCompetitors.map((c) => (

@@ -55,7 +55,7 @@ export function HomePage() {
                     </div>
                   </div>
                   <div className="flex items-center gap-3">
-                    <span className={`rounded-full border px-2.5 py-1 text-[11px] font-semibold ${phaseBadgeClass(league.phase)}`}>
+                    <span className={`rounded-full border px-2.5 py-1 text-xs font-semibold ${phaseBadgeClass(league.phase)}`}>
                       {phaseLabelText(league.phase)}
                     </span>
                     <span className="hidden text-xs text-zinc-600 sm:inline">

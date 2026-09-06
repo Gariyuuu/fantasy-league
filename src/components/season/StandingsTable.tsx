@@ -15,17 +15,19 @@ export function StandingsTable({ state }: Props) {
       <table className="w-full text-sm">
         <thead>
           <tr className="border-b border-zinc-800/80 text-left text-xs font-bold uppercase tracking-wide text-zinc-500">
-            <th className="px-3 py-2.5">#</th>
-            <th className="px-3 py-2.5">Team</th>
+            <th scope="col" className="px-3 py-2.5">#</th>
+            <th scope="col" className="px-3 py-2.5">Team</th>
             {isCumulative ? (
-              <th className="px-3 py-2.5 text-right">Points</th>
+              <th scope="col" className="num-col px-3 py-2.5">Points</th>
             ) : (
               <>
-                <th className="px-3 py-2.5 text-right">W</th>
-                <th className="px-3 py-2.5 text-right">L</th>
-                <th className="px-3 py-2.5 text-right">T</th>
-                <th className="px-3 py-2.5 text-right">PF</th>
-                <th className="px-3 py-2.5 text-right">PA</th>
+                {/* Single-letter headings are unreadable to a screen reader on
+                    their own; the abbreviation carries the expansion. */}
+                <th scope="col" className="num-col px-3 py-2.5"><abbr title="Wins">W</abbr></th>
+                <th scope="col" className="num-col px-3 py-2.5"><abbr title="Losses">L</abbr></th>
+                <th scope="col" className="num-col px-3 py-2.5"><abbr title="Ties">T</abbr></th>
+                <th scope="col" className="num-col px-3 py-2.5"><abbr title="Points for">PF</abbr></th>
+                <th scope="col" className="num-col px-3 py-2.5"><abbr title="Points against">PA</abbr></th>
               </>
             )}
           </tr>
@@ -45,14 +47,18 @@ export function StandingsTable({ state }: Props) {
                   {team.isHuman ? `${team.name} (you)` : team.name}
                 </td>
                 {isCumulative ? (
-                  <td className="stat-number px-3 py-2.5 text-right text-base text-zinc-200">{entry.pointsFor.toFixed(1)}</td>
+                  <td className="stat-number num-col px-3 py-2.5 text-base text-zinc-200">{entry.pointsFor.toFixed(1)}</td>
                 ) : (
                   <>
-                    <td className="px-3 py-2.5 text-right font-semibold text-emerald-400">{entry.wins}</td>
-                    <td className="px-3 py-2.5 text-right font-semibold text-rose-400">{entry.losses}</td>
-                    <td className="px-3 py-2.5 text-right text-zinc-400">{entry.ties}</td>
-                    <td className="stat-number px-3 py-2.5 text-right text-zinc-200">{entry.pointsFor.toFixed(1)}</td>
-                    <td className="stat-number px-3 py-2.5 text-right text-zinc-500">{entry.pointsAgainst?.toFixed(1)}</td>
+                    {/* W and L are already labelled by their column heading, so
+                        the colour here is reinforcement rather than the sole
+                        signal -- no ▲/▼ needed, but they do need to be tabular
+                        so the columns stop jittering between 9 and 10. */}
+                    <td className="num-col px-3 py-2.5 font-semibold text-emerald-400">{entry.wins}</td>
+                    <td className="num-col px-3 py-2.5 font-semibold text-rose-400">{entry.losses}</td>
+                    <td className="num-col px-3 py-2.5 text-zinc-400">{entry.ties}</td>
+                    <td className="stat-number num-col px-3 py-2.5 text-zinc-200">{entry.pointsFor.toFixed(1)}</td>
+                    <td className="stat-number num-col px-3 py-2.5 text-zinc-500">{entry.pointsAgainst?.toFixed(1)}</td>
                   </>
                 )}
               </tr>

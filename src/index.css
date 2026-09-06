@@ -1,5 +1,6 @@
 @import 'tailwindcss';
 @import './design-system/master.css';
+@import './design-system/numerics.css';
 
 :root {
   color-scheme: dark;
@@ -67,6 +68,26 @@ body {
 
 .stat-number {
   @apply font-mono font-black tabular-nums;
+}
+
+/* ---- W9 numerics binding ---------------------------------------------------
+ * The family layer's default ramp is tuned for the portfolio's neutral
+ * surfaces. This app sits on a saturated near-black gradient backdrop and
+ * already speaks in emerald/rose, so the delta tokens are re-pointed at the
+ * hues the app uses -- the SHAPE cue (▲/▼) is what the layer is really here
+ * for, and that is unchanged.
+ * Measured against the darkest backdrop stop (#05070d) and the zinc-900 card:
+ * emerald-400 #34d399 10.48:1 / 9.22:1, rose-400 #fb7185 7.48:1 / 6.58:1.
+ * -------------------------------------------------------------------------- */
+:root {
+  --num-up: #34d399;
+  --num-down: #fb7185;
+  --num-flat: #a1a1aa;
+  --num-warn: #fbbf24;
+  --num-up-surface: rgba(52, 211, 153, 0.14);
+  --num-down-surface: rgba(251, 113, 133, 0.14);
+  --num-flat-surface: rgba(161, 161, 170, 0.12);
+  --num-warn-surface: rgba(251, 191, 36, 0.14);
 }
 
 @keyframes clock-glow {
